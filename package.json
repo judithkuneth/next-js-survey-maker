@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start -p ${PORT:-\"3000\"}"
   },
   "dependencies": {
     "@emotion/core": "^10.0.35",
@@ -22,5 +22,8 @@
     "@upleveled/eslint-config-upleveled": "^1.1.2",
     "babel-eslint": "^10.1.0",
     "eslint-config-react-app": "^6.0.0"
-  }
+  },
+  "cacheDirectories": [
+    ".next/cache"
+  ]
 }

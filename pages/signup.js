@@ -1,4 +1,5 @@
 import Layout from '../components/Layout.js';
+import Link from 'next/link';
 
 export default function Login() {
   return (
@@ -10,9 +11,13 @@ export default function Login() {
       <input type="email" placeholder="hello@mail.com"></input>
       <p>Password</p>
       <input type="password"></input>
-      <button>Login</button>
+      <Link href="/dashboard">
+        <a>
+          <button>Signup</button>
+        </a>
+      </Link>
       <br />
-      <a href="/signup">New user? Signup here</a>
+      <a href="/login">I already have an account</a>
     </Layout>
   );
 }

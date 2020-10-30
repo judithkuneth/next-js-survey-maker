@@ -30,6 +30,14 @@ export default function Header() {
         <Link href="/">
           <a>Home</a>
         </Link>
+        <Link href="/dashboard">
+          <a>Dashboard</a>
+        </Link>
+        <Link href="/new">
+          <a>
+            <button>+ New</button>
+          </a>
+        </Link>
         <Link href="/login">
           <a>Login</a>
         </Link>

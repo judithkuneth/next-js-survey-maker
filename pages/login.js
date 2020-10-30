@@ -8,9 +8,9 @@ export default function Login() {
       <input type="email"></input>
       <p>Password</p>
       <input type="password"></input>
-      <button>Singup</button>
+      <button>Login</button>
       <br />
-      <a href="/login">I already have an account</a>
+      <a href="/signup">New user? Signup here</a>
     </Layout>
   );
 }
