@@ -1,3 +1,6 @@
+/** @jsx jsx */
+/** @jsxRuntime classic */
+import { jsx, css } from '@emotion/core';
 import Layout from '../components/Layout';
 import { useState } from 'react';
 import Link from 'next/link';

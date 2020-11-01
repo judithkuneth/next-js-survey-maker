@@ -1,15 +1,23 @@
+/** @jsx jsx */
+/** @jsxRuntime classic */
+import { jsx, css } from '@emotion/core';
+import React from 'react';
 import Layout from '../components/Layout';
 import { useState } from 'react';
 import Link from 'next/link';
 import Questions from '../components/Questions';
+
+const mainStyles = css`
+  background: blue;
+`;
 
 export default function New() {
   const [title, setTitle] = useState('My first Survey');
   const [url, setUrl] = useState('survey');
   return (
     //TODO input URL: make sure no spaces allowed
-    <>
-      <Layout>
+    <React.Fragment>
+      <Layout css={mainStyles}>
         <h3>Add a Title</h3>
         <input
           onChange={(e) => {
@@ -80,6 +88,6 @@ export default function New() {
           </a>
         </Link>
       </Layout>
-    </>
+    </React.Fragment>
   );
 }
