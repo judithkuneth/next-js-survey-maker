@@ -30,8 +30,10 @@
     "**/*.ts",
     "**/*.tsx",
     "**/*.js",
+    "**/*.mjs",
     "db-connect-example-node.mjs",
-    "components/Modal"
+    "components/Modal",
+    "db-connect.mjs"
   ],
   "exclude": ["cypress", "node_modules"]
 }
