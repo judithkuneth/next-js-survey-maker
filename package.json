@@ -11,6 +11,9 @@
   "dependencies": {
     "@emotion/core": "^10.0.35",
     "@types/react": "^16.9.55",
+    "argon2": "^0.27.0",
+    "camelcase-keys": "^6.2.2",
+    "csrf": "^3.1.0",
     "dotenv": "^8.2.0",
     "dotenv-cli": "^4.0.0",
     "ley": "^0.6.0",
