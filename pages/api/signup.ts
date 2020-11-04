@@ -31,5 +31,5 @@ export default async function handler(
   } catch (err) {
     return res.status(500).send({ success: false });
   }
-  res.send({ sucess: true });
+  res.send({ success: true });
 }

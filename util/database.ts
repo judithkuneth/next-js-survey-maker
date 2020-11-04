@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import postgres from 'postgres';
 import camelcaseKeys from 'camelcase-keys';
 import { User } from './types';
+import { Session } from 'inspector';
 
 dotenv.config();
 const sql = postgres();
@@ -14,9 +15,9 @@ export async function getUsers() {
 }
 
 export async function getUserById(id: number) {
-  const user = await sql`
+  const user = await sql<User[]>`
   SELECT * FROM users WHERE id = ${id}`;
-  console.log('getUserById', user);
+  console.log('getUserById', user[0]);
 
   return camelcaseKeys(user[0]);
 }
@@ -24,7 +25,7 @@ export async function getUserById(id: number) {
 export async function getUserByUsername(username: string) {
   const user = await sql<User[]>`
   SELECT * FROM users WHERE username = ${username}`;
-  console.log('getUserByUsename', user);
+  console.log('getUserByUsername', user[0]);
 
   return camelcaseKeys(user[0]);
 }
@@ -34,5 +35,15 @@ export async function signupUser(username: string, passwordHash: string) {
   INSERT INTO users(username, password_hash) 
   VALUES(${username}, ${passwordHash})
   RETURNING *;`;
-  return users.map((u) => camelcaseKeys(u))[0];
+  return users.map((user: User) => camelcaseKeys(user))[0];
+}
+
+export async function insertSession(token: string, userId: string) {
+  const sessions = await sql<Session[]>`
+  INSERT INTO sessions
+  (token, user_id)
+  VALUES
+  (${token}, ${userId})
+  RETURNING *`;
+  return sessions.map((session: Session) => camelcaseKeys(session))[0];
 }

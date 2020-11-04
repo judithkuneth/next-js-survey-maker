@@ -4,10 +4,12 @@ import { jsx, css } from '@emotion/core';
 import Layout from '../components/Layout.js';
 import Link from 'next/link';
 import { useState, Props } from 'react';
+import { useRouter } from 'next/router';
 
 export default function Login(props: { token: string }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
   const [errorMessage, setErrorMessage] = useState('');
   return (
     <Layout>
@@ -26,12 +28,11 @@ export default function Login(props: { token: string }) {
           });
           const { success } = await response.json();
           if (success) {
-            //TODO: do redirect
+            router.push('/dashboard');
           } else {
             if (response.status === 403) {
               setErrorMessage('User already exists!');
-            }
-            setErrorMessage('Failed!');
+            } else setErrorMessage('That Failed!');
           }
         }}
       >
@@ -61,7 +62,6 @@ export default function Login(props: { token: string }) {
 export async function getServerSideProps() {
   const Tokens = (await import('csrf')).default;
   const tokens = new Tokens();
-  // console.log(process.env.CSRF_TOKEN_SECRET);
   const secret = process.env.CSRF_TOKEN_SECRET;
 
   if (typeof secret === 'undefined') {
