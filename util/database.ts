@@ -47,3 +47,22 @@ export async function insertSession(token: string, userId: string) {
   RETURNING *`;
   return sessions.map((session: Session) => camelcaseKeys(session))[0];
 }
+
+export async function getSessionByToken(token: string) {
+  const sessions = await sql<Session[]>`
+  SELECT * FROM sessions WHERE token = ${token}`;
+  return sessions.map((session: Session) => camelcaseKeys(session))[0];
+}
+
+// Example of a database query with an Inner Join -> find out why?!
+export async function getUserBySessionToken(token: string) {
+  const users = await sql<User[]>`SELECT users.id,
+  username
+  FROM 
+  users, 
+  sessions
+   WHERE 
+   sessions.token = ${token} AND
+   users.id = sessions.user_id`;
+  return users.map((u) => camelcaseKeys(u))[0];
+}

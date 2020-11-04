@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useState, Props } from 'react';
 import { useRouter } from 'next/router';
 
-export default function Login(props: { token: string }) {
+export default function Signup(props: { token: string }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
