@@ -1,9 +1,18 @@
 import { getSessionByToken } from './database';
 
-export async function isTokenValid(token: string) {
+export async function isTokenValid(token: string | undefined) {
+  if (typeof token === 'undefined') {
+    return false;
+  }
+
   const session = await getSessionByToken(token);
+
+  if (typeof session === undefined) {
+    return false;
+  }
+
   if (session.expiryTimestamp < new Date()) {
     return false;
   }
-  return Boolean(await getSessionByToken(token));
+  return true;
 }

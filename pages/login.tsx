@@ -60,7 +60,8 @@ export default function Login() {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { session } = nextCookies(context);
-  if (typeof session !== 'undefined' && isTokenValid(session)) {
+  console.log('is Token Valid', await isTokenValid(session));
+  if (await isTokenValid(session)) {
     return {
       redirect: {
         destination: '/',

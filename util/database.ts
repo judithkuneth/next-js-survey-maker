@@ -41,11 +41,16 @@ export async function signupUser(username: string, passwordHash: string) {
 export async function insertSession(token: string, userId: string) {
   const sessions = await sql<Session[]>`
   INSERT INTO sessions
-  (token, user_id)
+  (token, user_id, expiry_Timestamp)
   VALUES
-  (${token}, ${userId})
+  (${token}, ${userId}, NOW()+INTERVAL'1 hour')
   RETURNING *`;
   return sessions.map((session: Session) => camelcaseKeys(session))[0];
+}
+
+export async function deleteExpiredSessions() {
+  await sql`
+  DELETE from sessions WHERE expiry_timestamp < NOW()`;
 }
 
 export async function getSessionByToken(token: string) {

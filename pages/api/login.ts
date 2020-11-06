@@ -1,7 +1,11 @@
 import crypto from 'crypto';
 import cookie from 'cookie';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getUserByUsername, insertSession } from '../../util/database';
+import {
+  getUserByUsername,
+  insertSession,
+  deleteExpiredSessions,
+} from '../../util/database';
 import argon2 from 'argon2';
 
 export default async function handler(
@@ -42,4 +46,6 @@ export default async function handler(
   console.log('session', session);
   console.log('req.body', req.body);
   res.send({ success: true });
+
+  await deleteExpiredSessions();
 }
