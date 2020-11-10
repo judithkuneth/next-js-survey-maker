@@ -2,7 +2,7 @@ A web application (design mobile-first) built with next-js to let User type A (e
 
 # Project Plan
 
-https://docs.google.com/spreadsheets/d/1caZhcuWzN1u0i26zU5BxitP3eqygxm1YQzY7vDRISqs/edit?usp=sharing
+:https://docs.google.com/spreadsheets/d/1caZhcuWzN1u0i26zU5BxitP3eqygxm1YQzY7vDRISqs/edit?usp=sharing
 
 ![image](https://user-images.githubusercontent.com/65610743/97443849-cbe4f500-192b-11eb-975f-8b9a507d9318.png)
 

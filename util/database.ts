@@ -1,11 +1,13 @@
 import dotenv from 'dotenv';
 import postgres from 'postgres';
 import camelcaseKeys from 'camelcase-keys';
-import { User } from './types';
-import { Session } from 'inspector';
+import { User, Survey, Session, SerializedSurvey, Question } from './types';
+// import { Session } from 'inspector';
 
 dotenv.config();
 const sql = postgres();
+
+// ------------USERS -----------------------
 
 export async function getUsers() {
   const users = await sql`
@@ -37,6 +39,8 @@ export async function signupUser(username: string, passwordHash: string) {
   RETURNING *;`;
   return users.map((user: User) => camelcaseKeys(user))[0];
 }
+
+// ------------ SESSIONS ------------------
 
 export async function insertSession(token: string, userId: string) {
   const sessions = await sql<Session[]>`
@@ -70,4 +74,45 @@ export async function getUserBySessionToken(token: string) {
    sessions.token = ${token} AND
    users.id = sessions.user_id`;
   return users.map((u) => camelcaseKeys(u))[0];
+}
+
+// ------------ SURVEYS ------------------
+
+export async function addSurvey(
+  userId: number,
+  title: string,
+  customSlug: string,
+) {
+  const surveys = await sql<Survey[]>`
+  INSERT INTO surveys(user_id, title, custom_slug, published) 
+  VALUES(${userId}, ${title}, ${customSlug}, false)
+  RETURNING *;`;
+  return surveys.map((survey: Survey) => camelcaseKeys(survey))[0];
+}
+
+export async function getSurveysByUserId(userId: number) {
+  const surveys = await sql<SerializedSurvey[]>`
+  SELECT * FROM surveys WHERE user_id = ${userId}`;
+  console.log('getSurveysbyUserId[0]', surveys[0]);
+
+  return surveys.map((u) => camelcaseKeys(u))[0];
+}
+
+// ------------ Questions ------------------
+
+export async function addQuestion(
+  surveyId: number,
+  itemOrder: number,
+  questionType: string,
+  title: string,
+  valueMin: string,
+  descriptionMin: string,
+  valueMax: string,
+  descriptionMax: string,
+) {
+  const questions = await sql<Question[]>`
+  INSERT INTO questions(survey_id,item_order,question_type,title,value_min,description_min,value_max,description_max)
+  VALUES(${surveyId},${itemOrder},${questionType},${title},${valueMin},${descriptionMin},${valueMax},${descriptionMax})
+  RETURNING *;`;
+  return questions.map((question: Question) => camelcaseKeys(question))[0];
 }

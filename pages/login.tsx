@@ -31,7 +31,7 @@ export default function Login() {
             setErrorMessage('Login failed');
           } else {
             setErrorMessage('');
-            router.push('/dashboard');
+            router.push(`/${username}`);
           }
         }}
       >
