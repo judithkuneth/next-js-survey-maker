@@ -2,6 +2,7 @@ import { useState } from "react"
 
 export default function QuestionComponent(){
 
+
   const [surveyId, setSurveyId]=useState(1);
 const [itemOrder,setItemOrder]=useState(0);
 const [questionType,setQuestionType]=useState('x_slider');
@@ -13,6 +14,7 @@ const [descriptionMax,setDescriptionMax]=useState('too fast')
 
 
   return(
+    <>
 <form onSubmit = {async (e) => {
           e.preventDefault();
           const response = await fetch('/api/question', {
@@ -34,7 +36,9 @@ const [descriptionMax,setDescriptionMax]=useState('too fast')
   <input onChange = {(e)=>{setDescriptionMin(e.currentTarget.value)}}/>
   <input type="number" onChange = {(e)=>{setValueMax(e.currentTarget.valueAsNumber)}}/>
   <input onChange = {(e)=>{setDescriptionMax(e.currentTarget.value)}}/>
-  <button>Save changes</button>
+  <button>Add question</button>
 </form>
+<button>+Question</button>
+</>
 )
 }

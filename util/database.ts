@@ -93,9 +93,9 @@ export async function addSurvey(
 export async function getSurveysByUserId(userId: number) {
   const surveys = await sql<SerializedSurvey[]>`
   SELECT * FROM surveys WHERE user_id = ${userId}`;
-  console.log('getSurveysbyUserId[0]', surveys[0]);
+  console.log('getSurveysbyUserId', surveys[0]);
 
-  return surveys.map((u) => camelcaseKeys(u))[0];
+  return surveys.map((u) => camelcaseKeys(u));
 }
 
 // ------------ Questions ------------------
@@ -115,4 +115,35 @@ export async function addQuestion(
   VALUES(${surveyId},${itemOrder},${questionType},${title},${valueMin},${descriptionMin},${valueMax},${descriptionMax})
   RETURNING *;`;
   return questions.map((question: Question) => camelcaseKeys(question))[0];
+}
+
+export async function editQuestionWhereIdIs(
+  id: number,
+  itemOrder: number,
+  questionType: string,
+  title: string,
+  valueMin: string,
+  descriptionMin: string,
+  valueMax: string,
+  descriptionMax: string,
+) {
+  const questions = await sql<Question[]>`
+  UPDATE questions SET item_order = ${itemOrder}, question_type = ${questionType}, title = ${title}, value_min = ${valueMin}, description_min = ${descriptionMin}, value_max = ${valueMax}, description_max = ${descriptionMax} WHERE id = ${id}
+  RETURNING *;`;
+  return questions.map((question: Question) => camelcaseKeys(question))[0];
+}
+
+export async function deleteQuestionWhereIdIs(id: number) {
+  const questions = await sql<Question[]>`
+  DELETE from questions WHERE id = ${id}
+  RETURNING *;`;
+  return questions.map((question: Question) => camelcaseKeys(question))[0];
+}
+
+export async function getQuestionWhereSurveyIdIs(id: number) {
+  const questions = await sql<Question[]>`
+  SELECT*from questions WHERE survey_id = ${id}
+  ;`;
+  // return camelcaseKeys(questions);
+  return questions.map((question: Question) => camelcaseKeys(question));
 }

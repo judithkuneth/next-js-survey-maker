@@ -2,13 +2,13 @@
 /** @jsxRuntime classic */
 import { jsx, css } from '@emotion/core';
 import Layout from '../components/Layout';
-import { getSurveysByUserId } from '../util/database';
+import { getQuestionWhereSurveyIdIs,getSurveysByUserId } from '../util/database';
 
 export default function dashboard(props) {
 
   const user = props.user
   return (
-    <Layout>
+    <Layout username = {user.username}>
       <h2>Welcome {user.username}!</h2>
       <div>
         <h3>UX Workshop</h3>
@@ -44,6 +44,7 @@ export default function dashboard(props) {
 
 export async function getServerSideProps(context) {
   const username = context.query.username;
+  console.log(context.query)
   const { getUserByUsername } = await import('../util/database');
   const user = await getUserByUsername(username);
   console.log('getting user by username', user);
@@ -51,6 +52,9 @@ export async function getServerSideProps(context) {
   const surveys = await getSurveysByUserId(user.id)
   // surveys[0].createdAt = JSON.stringify(survey.createdAt);
   console.log('gettingsurveys by userid', surveys);
+
+  const questions = await getQuestionWhereSurveyIdIs(surveys[0].id);
+  console.log('gettingquestions by surveyid:', surveys[0].id, questions);
 
   // const serializedSurveys = surveys.map((survey)=>JSON.stringify(survey.createdAt));
   // console.log('serialozedSurveys', serializedSurveys)

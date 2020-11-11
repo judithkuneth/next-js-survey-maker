@@ -7,18 +7,21 @@ import Link from 'next/link';
 import { GetServerSidePropsContext } from 'next';
 import { SerializedUser } from '../util/types';
 import handler from './api/users';
+import cookie from 'js-cookie'
+import nextCookies from 'next-cookies';
 
 type Props = {
   user: SerializedUser;
 };
 
 export default function Home(props: Props) {
-  if (!props.user) return console.log('user not found');
+  const username = cookie.getJSON('username')
+  if (!props.user) return (<Layout><div>You are not logged in, please <Link href = '/login'><a>login</a></Link> to get full access</div></Layout>)
+  
   const createdAt = new Date(JSON.parse(props.user.createdAt));
-  console.log(createdAt);
   return (
     // <div>
-    <Layout>
+    <Layout username = {username}>
       <Head>
         <title>Survey Maker</title>
         <link rel="icon" href="/logo.jpg" />
@@ -48,11 +51,17 @@ export default function Home(props: Props) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { getUserById } = await import('../util/database');
-  const user = await getUserById(1);
-  user.createdAt = JSON.stringify(user.createdAt);
-  return {
-    props: {
-      user: user,
-    },
-  };
+  const {username} = nextCookies(context);
+  if (username !== undefined){
+    
+    const { getUserByUsername } = await import('../util/database');
+    const user = await getUserByUsername(username)
+    user.createdAt = JSON.stringify(user.createdAt);
+    console.log('log user', user);
+    return {
+      props: {user: user
+      },} }
+  console.log('log username', username)
+
+  return {props:{}}
 }
