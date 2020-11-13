@@ -91,11 +91,29 @@ export async function addSurvey(
 }
 
 export async function getSurveysByUserId(userId: number) {
+  const dummySurvey = [
+    { id: 0, title: 'My first survey [dummy]', published: false },
+  ];
   const surveys = await sql<SerializedSurvey[]>`
   SELECT * FROM surveys WHERE user_id = ${userId}`;
-  console.log('getSurveysbyUserId', surveys[0]);
-
+  console.log('getSurveysbyUserId in database', surveys.count);
+  if (surveys.count === 0) return dummySurvey.map((d) => camelcaseKeys(d));
   return surveys.map((u) => camelcaseKeys(u));
+}
+
+export async function getSurveysBySurveyId(id: number) {
+  const surveys = await sql<SerializedSurvey[]>`
+  SELECT * FROM surveys WHERE id = ${id}`;
+  console.log('getSurveysbySurveyId in database', surveys[0].id);
+
+  return surveys.map((u) => camelcaseKeys(u))[0];
+}
+
+export async function deleteSurveyWhereIdIs(id: number) {
+  const surveys = await sql<Survey[]>`
+  DELETE from surveys WHERE id = ${id}
+  RETURNING *;`;
+  return surveys.map((survey: Survey) => camelcaseKeys(survey))[0];
 }
 
 // ------------ Questions ------------------

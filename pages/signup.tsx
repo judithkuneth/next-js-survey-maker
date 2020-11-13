@@ -28,7 +28,7 @@ export default function Signup(props: { token: string }) {
           });
           const { success } = await response.json();
           if (success) {
-            router.push(`/${username}`);
+            router.push(`/login`);
           } else {
             if (response.status === 403) {
               setErrorMessage('User already exists!');
