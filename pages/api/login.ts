@@ -28,7 +28,7 @@ export default async function handler(
   const randomCrypto = crypto.randomBytes(24);
   const token = randomCrypto.toString('base64');
 
-  const session = await insertSession(token, user.id);
+  // const session = await insertSession(token, user.id);
 
   const maxAge = 60 * 60 * 24; // 24hours
   const isProduction = process.env.NODE_ENV === 'production';
@@ -44,7 +44,6 @@ export default async function handler(
 
   res.setHeader('Set-Cookie', sessionCookie);
 
-  console.log('session', session);
   console.log('req.body', req.body);
   res.send({ success: true });
 
