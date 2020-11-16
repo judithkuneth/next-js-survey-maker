@@ -9,7 +9,7 @@ import { User, Survey, Session, SerializedSurvey, Question } from './types';
 require('dotenv').config();
 dotenv.config();
 
-import extractHerokuDatabaseEnvVars from './extractHerokuDatabaseEnvVars';
+import extractHerokuDatabaseEnvVars from '../extractHerokuDatabaseEnvVars';
 extractHerokuDatabaseEnvVars();
 
 const sql =
