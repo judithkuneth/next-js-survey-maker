@@ -6,7 +6,6 @@ import Layout from '../components/Layout';
 import Link from 'next/link';
 import { GetServerSidePropsContext } from 'next';
 import { SerializedUser } from '../util/types';
-import handler from './api/users';
 import cookie from 'js-cookie';
 import nextCookies from 'next-cookies';
 
