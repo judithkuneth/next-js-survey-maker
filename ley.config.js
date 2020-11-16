@@ -1,4 +1,4 @@
-const extractHerokuDatabaseEnvVars = require('./util/extractHerokuDatabaseEnvVars');
+const extractHerokuDatabaseEnvVars = require('./extractHerokuDatabaseEnvVars');
 
 extractHerokuDatabaseEnvVars();
 
