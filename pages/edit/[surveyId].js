@@ -29,7 +29,7 @@ export default function dashboard(props) {
             </div>
           );
         })}
-        <Link href={`/s/${survey.id}`}>
+        <Link href={`/edit/${survey.id}`}>
           <button>Refresh</button>
         </Link>
         <h2>Add a new question</h2>
@@ -45,7 +45,13 @@ export default function dashboard(props) {
         >
           save as draft
         </button>
-        <button>publish </button>
+        <button
+          onClick={(e) => {
+            window.location.href = `/r/${survey.customSlug}`;
+          }}
+        >
+          publish{' '}
+        </button>
       </div>
     </Layout>
   );

@@ -18,5 +18,5 @@ export default async function newSurveyHandler(
   }
 
   res.send({ success: true });
-  // router.push('/s/1')
+  // router.push('/edit/1')
 }

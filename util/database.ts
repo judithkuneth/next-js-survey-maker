@@ -4,8 +4,21 @@ import camelcaseKeys from 'camelcase-keys';
 import { User, Survey, Session, SerializedSurvey, Question } from './types';
 // import { Session } from 'inspector';
 
+// const sql = postgres();
+
+require('dotenv').config();
 dotenv.config();
-const sql = postgres();
+
+import extractHerokuDatabaseEnvVars from './extractHerokuDatabaseEnvVars';
+extractHerokuDatabaseEnvVars();
+
+const sql =
+  process.env.NODE_ENV === 'production'
+    ? // Heroku needs SSL connections but
+      // has an "unauthorized" certificate
+      // https://devcenter.heroku.com/changelog-items/852
+      postgres({ ssl: { rejectUnauthorized: false } })
+    : postgres();
 
 // ------------USERS -----------------------
 
@@ -105,6 +118,14 @@ export async function getSurveysBySurveyId(id: number) {
   const surveys = await sql<SerializedSurvey[]>`
   SELECT * FROM surveys WHERE id = ${id}`;
   console.log('getSurveysbySurveyId in database', surveys[0].id);
+
+  return surveys.map((u) => camelcaseKeys(u))[0];
+}
+
+export async function getSurveyBySlug(slug: string) {
+  const surveys = await sql<SerializedSurvey[]>`
+  SELECT * FROM surveys WHERE custom_slug = ${slug}`;
+  console.log('getSurveybySlug in database', surveys[0]);
 
   return surveys.map((u) => camelcaseKeys(u))[0];
 }

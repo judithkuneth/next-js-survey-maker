@@ -74,7 +74,7 @@ export default function EditQuestionComponent(props) {
         <button>Save changes</button>
       </form>
       {/*TODO: Refresh onClick!*/}
-      {/* <Link href = {`/s/${surveyId}`}> */}
+      {/* <Link href = {`/edit/${surveyId}`}> */}
       <form
         onSubmit={async (e) => {
           e.preventDefault();

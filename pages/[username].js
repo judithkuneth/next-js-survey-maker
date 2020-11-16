@@ -69,7 +69,7 @@ export default function dashboard(props) {
           <button>share</button>
           <button
             onClick={(e) => {
-              window.location.href = `/s/${survey.id}`;
+              window.location.href = `/edit/${survey.id}`;
             }}
           >
             edit
@@ -87,6 +87,13 @@ export default function dashboard(props) {
             }}
           >
             delete
+          </button>
+          <button
+            onClick={(e) => {
+              window.location.href = `/r/${survey.customSlug}`;
+            }}
+          >
+            publish
           </button>
           <br />
           <br />
