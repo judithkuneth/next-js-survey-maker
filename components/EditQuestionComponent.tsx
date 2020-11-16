@@ -2,12 +2,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import questions from '../pages/questions';
-import { getQuestionWhereSurveyIdIs } from '../util/database';
+import { Survey, Question } from '../util/types';
 
-export default function EditQuestionComponent(props) {
+export default function EditQuestionComponent(props: { question: Question }) {
   const router = useRouter();
   const question = props.question;
-  const surveyId = props.surveyId;
 
   const questionId = question.id;
   const [itemOrder, setItemOrder] = useState(question.itemOrder);

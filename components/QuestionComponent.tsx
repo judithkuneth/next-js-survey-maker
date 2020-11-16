@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { Survey } from '../util/types';
 
-export default function QuestionComponent(props) {
+export default function QuestionComponent(props: { survey: Survey }) {
   const [surveyId, setSurveyId] = useState(props.survey.id);
   const [itemOrder, setItemOrder] = useState(0);
   const [questionType, setQuestionType] = useState('x_slider');

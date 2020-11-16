@@ -38,6 +38,7 @@ export type SerializedSurvey = {
 };
 
 export type Question = {
+  id: number;
   surveyId: number;
   itemOrder: number;
   questionType: string;

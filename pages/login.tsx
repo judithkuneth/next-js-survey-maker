@@ -7,7 +7,6 @@ import { useRouter } from 'next/router';
 import { isTokenValid } from '../util/auth';
 import { GetServerSidePropsContext } from 'next';
 import nextCookies from 'next-cookies';
-import cookies from 'next-cookies';
 import cookie from 'js-cookie'
 
 export default function Login() {
