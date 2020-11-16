@@ -186,3 +186,15 @@ export async function getQuestionWhereSurveyIdIs(id: number) {
   // return camelcaseKeys(questions);
   return questions.map((question: Question) => camelcaseKeys(question));
 }
+
+// ------------ Responses ------------------
+
+export async function insertResponse(token: string, userId: string) {
+  const sessions = await sql<Session[]>`
+  INSERT INTO sessions
+  (token, user_id, expiry_Timestamp)
+  VALUES
+  (${token}, ${userId}, NOW()+INTERVAL'1 hour')
+  RETURNING *`;
+  return sessions.map((session: Session) => camelcaseKeys(session))[0];
+}

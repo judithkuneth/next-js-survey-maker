@@ -34,7 +34,9 @@ export default function slug(props) {
     <Layout>
       <h1>Take this survey {survey.title} </h1>
       <p>www.surveymaker.com/{slug}</p>
-      <p>Questions: {map};</p>
+      <form>
+        <p>Questions: {map};</p>
+      </form>
     </Layout>
   );
 }
