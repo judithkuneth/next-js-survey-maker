@@ -22,12 +22,12 @@ const sql =
 
 // ------------USERS -----------------------
 
-export async function getUsers() {
-  const users = await sql`
-  SELECT * FROM users`;
+// export async function getUsers() {
+//   const users = await sql`
+//   SELECT * FROM users`;
 
-  return users.map(camelcaseKeys);
-}
+//   return users.map((user:User)=>camelcaseKeys(user));
+// }
 
 export async function getUserById(id: number) {
   const user = await sql<User[]>`
