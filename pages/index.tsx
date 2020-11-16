@@ -66,11 +66,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (username !== undefined) {
     const { getUserByUsername } = await import('../util/database');
     const user = await getUserByUsername(username);
-    const createdAtToString = JSON.stringify(user.createdAt);
-    user.createdAt = createdAtToString;
+    const serializedUser = {
+      ...user,
+      createdAt: JSON.stringify(user.createdAt),
+    };
+
     console.log('log user', user);
     return {
-      props: { user: user },
+      props: { user: serializedUser },
     };
   }
   console.log('log username', username);
