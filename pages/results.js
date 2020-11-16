@@ -1,6 +1,6 @@
 /** @jsx jsx */
 /** @jsxRuntime classic */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import Layout from '../components/Layout';
 
 export default function results() {

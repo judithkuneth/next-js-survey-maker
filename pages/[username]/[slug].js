@@ -1,5 +1,4 @@
 import Layout from '../../components/Layout';
-import questions from '../questions';
 // import nextCookies from 'next-cookies';
 // import Link from 'next/link';
 

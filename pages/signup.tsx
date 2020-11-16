@@ -2,8 +2,7 @@
 /** @jsxRuntime classic */
 import { jsx, css } from '@emotion/core';
 import Layout from '../components/Layout.js';
-import Link from 'next/link';
-import { useState, Props } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 export default function Signup(props: { token: string }) {

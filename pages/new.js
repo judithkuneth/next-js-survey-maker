@@ -4,10 +4,7 @@ import { jsx, css } from '@emotion/core';
 import React from 'react';
 import Layout from '../components/Layout';
 import { useState } from 'react';
-import Link from 'next/link';
-import Questions from '../components/Questions';
-import QuestionComponent from '../components/QuestionComponent';
-import EditQuestionComponent from '../components/EditQuestionComponent';
+
 import { useRouter } from 'next/router';
 import nextCookies from 'next-cookies';
 import cookie from 'js-cookie';

@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { addQuestion } from '../../util/database';
-import { Question } from '../../util/types';
 
 export default async function newQuestionHandler(
   req: NextApiRequest,
