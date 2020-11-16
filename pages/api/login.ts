@@ -25,7 +25,8 @@ export default async function handler(
     return res.status(401).send({ success: false });
   }
 
-  const token = crypto.randomBytes(24).toString('base64');
+  const randomCrypto = crypto.randomBytes(24);
+  const token = randomCrypto.toString('base64');
 
   const session = await insertSession(token, user.id);
 
