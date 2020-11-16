@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { GetServerSidePropsContext } from 'next';
 import { SerializedUser } from '../util/types';
 import handler from './api/users';
-import cookie from 'js-cookie'
+import cookie from 'js-cookie';
 import nextCookies from 'next-cookies';
 
 type Props = {
@@ -15,13 +15,24 @@ type Props = {
 };
 
 export default function Home(props: Props) {
-  const username = cookie.getJSON('username')
-  if (!props.user) return (<Layout><div>You are not logged in, please <Link href = '/login'><a>login</a></Link> to get full access</div></Layout>)
-  
+  const username = cookie.getJSON('username');
+  if (!props.user)
+    return (
+      <Layout>
+        <div>
+          You are not logged in, please{' '}
+          <Link href="/login">
+            <a>login</a>
+          </Link>{' '}
+          to get full access
+        </div>
+      </Layout>
+    );
+
   const createdAt = new Date(JSON.parse(props.user.createdAt));
   return (
     // <div>
-    <Layout username = {username}>
+    <Layout username={username}>
       <Head>
         <title>Survey Maker</title>
         <link rel="icon" href="/logo.jpg" />
@@ -51,17 +62,18 @@ export default function Home(props: Props) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { getUserById } = await import('../util/database');
-  const {username} = nextCookies(context);
-  if (username !== undefined){
-    
+  const { username } = nextCookies(context);
+  if (username !== undefined) {
     const { getUserByUsername } = await import('../util/database');
-    const user = await getUserByUsername(username)
-    user.createdAt = JSON.stringify(user.createdAt);
+    const user = await getUserByUsername(username);
+    const createdAtToString = JSON.stringify(user.createdAt);
+    user.createdAt = createdAtToString;
     console.log('log user', user);
     return {
-      props: {user: user
-      },} }
-  console.log('log username', username)
+      props: { user: user },
+    };
+  }
+  console.log('log username', username);
 
-  return {props:{}}
+  return { props: {} };
 }
