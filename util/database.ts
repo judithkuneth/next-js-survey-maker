@@ -1,7 +1,15 @@
 import dotenv from 'dotenv';
 import postgres from 'postgres';
 import camelcaseKeys from 'camelcase-keys';
-import { User, Survey, Session, SerializedSurvey, Question } from './types';
+import {
+  User,
+  Survey,
+  Session,
+  SerializedSurvey,
+  Question,
+  Response,
+  ResponseInput,
+} from './types';
 // import { Session } from 'inspector';
 
 // const sql = postgres();
@@ -189,12 +197,18 @@ export async function getQuestionWhereSurveyIdIs(id: number) {
 
 // ------------ Responses ------------------
 
-export async function insertResponse(token: string, userId: string) {
-  const sessions = await sql<Session[]>`
-  INSERT INTO sessions
-  (token, user_id, expiry_Timestamp)
+export async function insertResponse(responseValues: ResponseInput[]) {
+  async function addResponse(questionId: number, responseValue: number) {
+    console.log('questionId:', questionId, 'responseValue:', responseValue);
+    await sql<Response[]>`
+  INSERT INTO responses
+  (question_id, response_value)
   VALUES
-  (${token}, ${userId}, NOW()+INTERVAL'1 hour')
+  (${questionId},${responseValue})
   RETURNING *`;
-  return sessions.map((session: Session) => camelcaseKeys(session))[0];
+  }
+
+  return responseValues.map((response: ResponseInput) =>
+    camelcaseKeys(addResponse(response.questionId, response.responseValue)),
+  )[0];
 }

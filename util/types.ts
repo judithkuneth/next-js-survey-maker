@@ -48,3 +48,15 @@ export type Question = {
   descriptionMin: string;
   descriptionMax: string;
 };
+
+export type Response = {
+  id: number;
+  questionId: number;
+  createdAt: string;
+  responseValue: number;
+};
+
+export type ResponseInput = {
+  questionId: number;
+  responseValue: number;
+};

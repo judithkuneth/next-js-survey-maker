@@ -37,7 +37,13 @@ export default function dashboard(props) {
         <br />
         <br />
         <br />
-        <button>preview</button>
+        <button
+          onClick={(e) => {
+            window.location.href = `/r/${survey.customSlug}`;
+          }}
+        >
+          preview
+        </button>
         <button
           onClick={(e) => {
             window.location.href = `/${username}`;
