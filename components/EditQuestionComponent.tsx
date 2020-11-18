@@ -38,6 +38,13 @@ export default function EditQuestionComponent(props: { question: Question }) {
           });
         }}
       >
+        <select name="questionType" id="questionType">
+          <option value="x_slider">x slider</option>
+          <option value="y_slider">y slider</option>
+          <option value="gauge">gauge</option>
+          <option value="binary">gwo Buttons</option>
+        </select>
+
         <input
           value={title}
           onChange={(e) => {
@@ -87,8 +94,9 @@ export default function EditQuestionComponent(props: { question: Question }) {
         }}
       >
         <button
-        // does not work:
-        // onClick ={(e)=>{location.reload}}
+          onClick={(e) => {
+            location.reload(true);
+          }}
         >
           delete
         </button>

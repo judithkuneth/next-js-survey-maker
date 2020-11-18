@@ -1,7 +1,11 @@
 import crypto from 'crypto';
 import cookie from 'cookie';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getUserByUsername, deleteExpiredSessions } from '../../util/database';
+import {
+  getUserByUsername,
+  deleteExpiredSessions,
+  insertSession,
+} from '../../util/database';
 import argon2 from 'argon2';
 
 export default async function handler(
@@ -24,7 +28,7 @@ export default async function handler(
   const randomCrypto = crypto.randomBytes(24);
   const token = randomCrypto.toString('base64');
 
-  // const session = await insertSession(token, user.id);
+  const session = await insertSession(token, user.id);
 
   const maxAge = 60 * 60 * 24; // 24hours
   const isProduction = process.env.NODE_ENV === 'production';

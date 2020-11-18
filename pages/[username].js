@@ -2,6 +2,7 @@
 /** @jsxRuntime classic */
 import { jsx, css } from '@emotion/core';
 import Layout from '../components/Layout';
+import nextCookies from 'next-cookies';
 // import {
 //   getQuestionWhereSurveyIdIs,
 //   getSurveysByUserId,
@@ -122,33 +123,29 @@ export default function dashboard(props) {
 }
 
 export async function getServerSideProps(context) {
-  const username = context.query.username;
-  console.log(context.query);
-  const { getUserByUsername } = await import('../util/database');
-  const user = await getUserByUsername(username);
-  console.log('getting user by username', user);
-  user.createdAt = JSON.stringify(user.createdAt);
-  const { getSurveysByUserId } = await import('../util/database');
-  const dummySurvey = await getSurveysByUserId(user.id);
+  const { session } = nextCookies(context);
+  const { getSessionByToken } = await import('../util/database');
 
-  if (dummySurvey[0].id === 0) {
-    console.log('check if dummySurvey[0]===0', dummySurvey[0] === 0);
-    return { props: { dummySurvey, user } };
-    // const questions = await getQuestionWhereSurveyIdIs(surveys[0].id);
-    // console.log('gettingquestions by surveyid:', surveys[0].id, questions);
-    // return { props: { user: user } };
+  if (session !== undefined) {
+    const sessionByToken = await getSessionByToken(session);
+    const userId = sessionByToken.userId;
+    console.log('session.userId', sessionByToken.userId);
+    const { getUserById } = await import('../util/database');
+    const user = await getUserById(userId);
+    user.createdAt = JSON.stringify(user.createdAt);
+
+    const { getSurveysByUserId } = await import('../util/database');
+    const dummySurvey = await getSurveysByUserId(user.id);
+
+    if (dummySurvey[0].id === 0) {
+      console.log('check if dummySurvey[0]===0', dummySurvey[0] === 0);
+      return { props: { dummySurvey, user } };
+    }
+
+    const surveys = await getSurveysByUserId(user.id);
+
+    return {
+      props: { user: user, surveys: surveys },
+    };
   }
-
-  // const serializedSurveys = surveys.map((survey)=>JSON.stringify(survey.createdAt));
-  // console.log('serialozedSurveys', serializedSurveys)
-
-  // const props = { surveys: surveys };
-  // if (user) props.user = user;
-  const surveys = await getSurveysByUserId(user.id);
-  // surveys[0].createdAt = JSON.stringify(survey.createdAt);
-  console.log('surveys in sreverside ', surveys);
-
-  return {
-    props: { user: user, surveys: surveys },
-  };
 }

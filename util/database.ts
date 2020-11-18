@@ -37,6 +37,13 @@ const sql =
 //   return users.map((user:User)=>camelcaseKeys(user));
 // }
 
+// export async function getSessionByToken(token: string) {
+//   const session = await sql<Session[]>`
+//   SELECT * FROM sessions WHERE token = ${token}`;
+//   console.log('getUserIdBySessionbyToken', session[0]);
+
+//   return camelcaseKeys(session[0]);
+// }
 export async function getUserById(id: number) {
   const user = await sql<User[]>`
   SELECT * FROM users WHERE id = ${id}`;
@@ -63,7 +70,7 @@ export async function signupUser(username: string, passwordHash: string) {
 
 // ------------ SESSIONS ------------------
 
-export async function insertSession(token: string, userId: string) {
+export async function insertSession(token: string, userId: number) {
   const sessions = await sql<Session[]>`
   INSERT INTO sessions
   (token, user_id, expiry_Timestamp)

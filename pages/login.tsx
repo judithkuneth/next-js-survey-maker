@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { isTokenValid } from '../util/auth';
 import { GetServerSidePropsContext } from 'next';
 import nextCookies from 'next-cookies';
-import cookie from 'js-cookie'
+import cookie from 'js-cookie';
 
 export default function Login() {
   const router = useRouter();
@@ -31,7 +31,8 @@ export default function Login() {
           if (!success) {
             setErrorMessage('Login failed');
           } else {
-            setErrorMessage('');cookie.set('username', `${username}`)
+            setErrorMessage('');
+            cookie.set('username', `${username}`);
             router.push(`/${username}`);
           }
         }}
@@ -61,9 +62,14 @@ export default function Login() {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { session, username } = nextCookies(context);
-  console.log('is Token Valid', await isTokenValid(session));
-  console.log(username)
+  // const { getUserIdByToken } = await import('../util/database');
+
+  // if (session !== undefined) {
+  //   const userId = await getUserIdByToken(session);
+  //   console.log('userId', userId);
+
   if (await isTokenValid(session)) {
+    console.log('tokenvalid?yes');
     return {
       redirect: {
         destination: '/',
@@ -71,6 +77,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
   }
+  console.log('istokenvalid? no');
 
   return { props: {} };
 }
+//   return { props: {} };
+// }

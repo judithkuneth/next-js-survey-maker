@@ -62,12 +62,6 @@ export default function slug(props) {
       <div>
         <h2>{question.title}</h2>
         <br />
-        <select name="questionType" id="questionType">
-          <option value="x_slider">x slider</option>
-          <option value="y_slider">y slider</option>
-          <option value="gauge">gauge</option>
-          <option value="binary">gwo Buttons</option>
-        </select>
         <br />
         {question.descriptionMin}({question.valueMin})
         <input

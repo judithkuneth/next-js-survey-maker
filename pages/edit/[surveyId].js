@@ -4,8 +4,9 @@ import { jsx, css } from '@emotion/core';
 import EditQuestionComponent from '../../components/EditQuestionComponent';
 import Layout from '../../components/Layout';
 import nextCookies from 'next-cookies';
-import QuestionComponent from '../../components/QuestionComponent';
+import AddQuestionComponent from '../../components/AddQuestionComponent';
 import Link from 'next/link';
+import { isTokenValid } from '../../util/auth';
 
 // import { getQuestionWhereSurveyIdIs,getSurveysByUserId } from '../../util/database';
 
@@ -33,7 +34,7 @@ export default function dashboard(props) {
           <button>Refresh</button>
         </Link>
         <h2>Add a new question</h2>
-        <QuestionComponent survey={survey} />
+        <AddQuestionComponent survey={survey} />
         <br />
         <br />
         <br />
@@ -64,23 +65,34 @@ export default function dashboard(props) {
 }
 
 export async function getServerSideProps(context) {
-  const { username } = nextCookies(context);
-  console.log('username', username);
-  const { getUserByUsername } = await import('../../util/database');
-  const user = await getUserByUsername(username);
-  user.createdAt = JSON.stringify(user.createdAt);
-  const surveyId = context.query.surveyId;
-  console.log('query', context.query);
+  const { session } = nextCookies(context);
+  const { getSessionByToken } = await import('../../util/database');
 
-  const { getSurveysBySurveyId } = await import('../../util/database');
-  const survey = await getSurveysBySurveyId(surveyId);
-  console.log('gettingsurvey by surveyid:', surveyId, survey);
+  if (await isTokenValid(session)) {
+    console.log('token valid');
 
-  const { getQuestionWhereSurveyIdIs } = await import('../../util/database');
-  const questions = await getQuestionWhereSurveyIdIs(surveyId);
-  console.log('gettingquestions by surveyid:', surveyId, questions);
+    const sessionByToken = await getSessionByToken(session);
 
-  return {
-    props: { user, survey, surveyId, questions },
-  };
+    const userId = sessionByToken.userId;
+    console.log('userId', sessionByToken.userId);
+
+    const { getUserById } = await import('../../util/database');
+    const user = await getUserById(userId);
+    user.createdAt = JSON.stringify(user.createdAt);
+
+    const surveyId = context.query.surveyId;
+    console.log('query', context.query);
+
+    const { getSurveysBySurveyId } = await import('../../util/database');
+    const survey = await getSurveysBySurveyId(surveyId);
+    console.log('gettingsurvey by surveyid:', surveyId, survey);
+
+    const { getQuestionWhereSurveyIdIs } = await import('../../util/database');
+    const questions = await getQuestionWhereSurveyIdIs(surveyId);
+    console.log('gettingquestions by surveyid:', surveyId, questions);
+
+    return {
+      props: { user, survey, surveyId, questions },
+    };
+  }
 }
