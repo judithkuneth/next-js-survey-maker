@@ -33,7 +33,7 @@ export default function Login() {
           } else {
             setErrorMessage('');
             cookie.set('username', `${username}`);
-            router.push(`/${username}`);
+            router.push(`/user/${username}`);
           }
         }}
       >
@@ -62,23 +62,30 @@ export default function Login() {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { session, username } = nextCookies(context);
-  // const { getUserIdByToken } = await import('../util/database');
 
-  // if (session !== undefined) {
-  //   const userId = await getUserIdByToken(session);
-  //   console.log('userId', userId);
+  if (session !== undefined) {
+    const { getSessionByToken } = await import('../util/database');
+    const sessionByToken = await getSessionByToken(session);
+    const userId = sessionByToken.userId;
+    console.log('session.userId', sessionByToken.userId);
+    const { getUserById } = await import('../util/database');
+    const user = await getUserById(userId);
+    const username = user.username;
+    // user.createdAt = JSON.stringify(user.createdAt);
 
-  if (await isTokenValid(session)) {
-    console.log('tokenvalid?yes');
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
+    if (await isTokenValid(session)) {
+      console.log('tokenvalid?yes');
+      return {
+        redirect: {
+          destination: `/user/${username}`,
+          permanent: false,
+        },
+      };
+    }
+    console.log('istokenvalid? no');
+
+    return { props: {} };
   }
-  console.log('istokenvalid? no');
-
   return { props: {} };
 }
 //   return { props: {} };

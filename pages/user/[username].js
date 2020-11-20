@@ -1,7 +1,7 @@
 /** @jsx jsx */
 /** @jsxRuntime classic */
 import { jsx, css } from '@emotion/core';
-import Layout from '../components/Layout';
+import Layout from '../../components/Layout';
 import nextCookies from 'next-cookies';
 // import {
 //   getQuestionWhereSurveyIdIs,
@@ -70,7 +70,7 @@ export default function dashboard(props) {
           <button>share</button>
           <button
             onClick={(e) => {
-              window.location.href = `/edit/${survey.id}`;
+              window.location.href = `/${survey.customSlug}/edit`;
             }}
           >
             edit
@@ -91,7 +91,7 @@ export default function dashboard(props) {
           </button>
           <button
             onClick={(e) => {
-              window.location.href = `/r/${survey.customSlug}`;
+              window.location.href = `/${survey.customSlug}`;
             }}
           >
             publish
@@ -124,17 +124,17 @@ export default function dashboard(props) {
 
 export async function getServerSideProps(context) {
   const { session } = nextCookies(context);
-  const { getSessionByToken } = await import('../util/database');
+  const { getSessionByToken } = await import('../../util/database');
 
   if (session !== undefined) {
     const sessionByToken = await getSessionByToken(session);
     const userId = sessionByToken.userId;
     console.log('session.userId', sessionByToken.userId);
-    const { getUserById } = await import('../util/database');
+    const { getUserById } = await import('../../util/database');
     const user = await getUserById(userId);
     user.createdAt = JSON.stringify(user.createdAt);
 
-    const { getSurveysByUserId } = await import('../util/database');
+    const { getSurveysByUserId } = await import('../../util/database');
     const dummySurvey = await getSurveysByUserId(user.id);
 
     if (dummySurvey[0].id === 0) {

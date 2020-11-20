@@ -27,14 +27,14 @@ const headerStyles = css`
 `;
 
 export default function Header(props) {
-  const username = props.username
+  const username = props.username;
   return (
     <header css={headerStyles}>
       <nav>
         <Link href="/">
           <a>Home</a>
         </Link>
-        <Link href={`/${username}`}>
+        <Link href={`/user/${username}`}>
           <a>Dashboard</a>
         </Link>
         <Link href="/new">

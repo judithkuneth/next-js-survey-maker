@@ -38,19 +38,22 @@ export default function EditQuestionComponent(props: { question: Question }) {
           });
         }}
       >
+        <input
+          placeholder="Question e.g. How relevant was this course to you?"
+          value={title}
+          onChange={(e) => {
+            setTitle(e.currentTarget.value);
+          }}
+        />
+        <br />
         <select name="questionType" id="questionType">
           <option value="x_slider">x slider</option>
           <option value="y_slider">y slider</option>
           <option value="gauge">gauge</option>
           <option value="binary">gwo Buttons</option>
         </select>
-
-        <input
-          value={title}
-          onChange={(e) => {
-            setTitle(e.currentTarget.value);
-          }}
-        />
+        <br />
+        <br />
         <input
           value={valueMin}
           type="number"
@@ -64,6 +67,8 @@ export default function EditQuestionComponent(props: { question: Question }) {
             setDescriptionMin(e.currentTarget.value);
           }}
         />
+        <input type="range"></input>
+
         <input
           value={valueMax}
           type="number"
@@ -77,7 +82,9 @@ export default function EditQuestionComponent(props: { question: Question }) {
             setDescriptionMax(e.currentTarget.value);
           }}
         />
+        <br />
         <button>Save changes</button>
+        <br />
       </form>
       {/*TODO: Refresh onClick!*/}
       {/* <Link href = {`/edit/${surveyId}`}> */}
@@ -98,7 +105,7 @@ export default function EditQuestionComponent(props: { question: Question }) {
             location.reload(true);
           }}
         >
-          delete
+          delete this question
         </button>
       </form>
       {/* </Link> */}

@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import nextCookies from 'next-cookies';
 import cookie from 'js-cookie';
+import { isTokenValid } from '../util/auth';
 
 const mainStyles = css`
   background: blue;
@@ -18,9 +19,9 @@ export default function New(props) {
   const user = props.user;
   // const username = user.username;
   const [title, setTitle] = useState('');
-  const [customSlug, setCustomSlug] = useState('');
+  const [slug, setSlug] = useState('');
   const router = useRouter();
-
+  // if (user.id !== 0) {
   return (
     //TODO input URL: make sure no spaces allowed
     <React.Fragment>
@@ -34,7 +35,7 @@ export default function New(props) {
               body: JSON.stringify({
                 userId: user.id,
                 title: title,
-                customSlug: customSlug,
+                customSlug: slug,
               }),
             });
           }}
@@ -54,64 +55,44 @@ export default function New(props) {
           <input
             placeholder="custom-slug"
             onChange={(e) => {
-              setCustomSlug(e.currentTarget.value);
+              setSlug(e.currentTarget.value);
             }}
           />
           <br />
           <button
             onClick={(e) => {
-              window.location.href = `/${user.username}`;
+              window.location.href = `/${slug}/edit`;
             }}
           >
             Create survey
           </button>
         </form>
-        {/* <Link href="/questions">
-          <button>+ Add Questions</button>
-        </Link>
-        <br />
-        <br />
-        <br /> */}
-
-        {/* -----------------------preview----------------------------------------------------
-        <h1>{title}</h1>
-        www.survey.com/{customSlug} */}
-        {/* <QuestionComponent /> */}
-        {/* <EditQuestionComponent/> */}
-        {/* <Link href="/signup">
-          <button>Save This</button>
-        </Link>
-        <Link href="/signup">
-          <button>Publish</button>
-        </Link> */}
       </Layout>
     </React.Fragment>
   );
+  // }
+  // return <Layout>Hello World</Layout>;
 }
 
 export async function getServerSideProps(context) {
-  const { username } = nextCookies(context);
-  console.log('username from context', username);
-  // console.log('username from context', username);
-  const { getUserByUsername } = await import('../util/database');
-  const user = await getUserByUsername(username);
-  user.createdAt = JSON.stringify(user.createdAt);
-  console.log('user log', user);
+  const { session } = nextCookies(context);
+  const { getSessionByToken } = await import('../util/database');
 
-  // const user = await getUserByUsername(username);
-  // console.log('getting user by username', user);
+  if (await isTokenValid(session)) {
+    console.log('token valid');
 
-  // const surveys = await getSurveysByUserId(user.id)
-  // // surveys[0].createdAt = JSON.stringify(survey.createdAt);
-  // console.log('gettingsurveys by userid', surveys);
+    const sessionByToken = await getSessionByToken(session);
 
-  // const questions = await getQuestionWhereSurveyIdIs(surveys[0].id);
-  // console.log('gettingquestions by surveyid:', surveys[0].id, questions);
+    const userId = sessionByToken.userId;
+    console.log('userId', sessionByToken.userId);
 
-  // const props = {surveys:surveys};
-  // if (user) props.user = user;
-  // return {
-  //   props: {user:user},
-  // };
-  return { props: { user } };
+    const { getUserById } = await import('../util/database');
+    const user = await getUserById(userId);
+    user.createdAt = JSON.stringify(user.createdAt);
+
+    return { props: { user } };
+  }
+
+  const dummyUser = { id: 1 };
+  return { props: { user: dummyUser } };
 }

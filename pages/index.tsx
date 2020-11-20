@@ -8,6 +8,7 @@ import { GetServerSidePropsContext } from 'next';
 import { SerializedUser } from '../util/types';
 import cookie from 'js-cookie';
 import nextCookies from 'next-cookies';
+import { isTokenValid } from '../util/auth';
 
 type Props = {
   user: SerializedUser;
@@ -60,22 +61,33 @@ export default function Home(props: Props) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const { session } = nextCookies(context);
   const { getUserById } = await import('../util/database');
-  const { username } = nextCookies(context);
-  if (username !== undefined) {
-    const { getUserByUsername } = await import('../util/database');
-    const user = await getUserByUsername(username);
-    const serializedUser = {
-      ...user,
-      createdAt: JSON.stringify(user.createdAt),
-    };
 
-    console.log('log user', user);
-    return {
-      props: { user: serializedUser },
-    };
+  // if (username !== undefined)
+  if (await isTokenValid(session)) {
+    const { getSessionByToken } = await import('../util/database');
+    if (session !== undefined) {
+      const sessionByToken = await getSessionByToken(session);
+      const userId = sessionByToken.userId;
+      console.log('session.userId', sessionByToken.userId);
+      const { getUserById } = await import('../util/database');
+      const user = await getUserById(userId);
+      // user.createdAt = JSON.stringify(user.createdAt);
+      // const { getUserByUsername } = await import('../util/database');
+      // const user = await getUserByUsername(username);
+      const serializedUser = {
+        ...user,
+        createdAt: JSON.stringify(user.createdAt),
+      };
+
+      console.log('log user', user);
+      return {
+        props: { user: serializedUser },
+      };
+    }
   }
-  console.log('log username', username);
+  // console.log('log username', username);
 
   return { props: {} };
 }
