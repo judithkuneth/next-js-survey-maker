@@ -9,6 +9,7 @@ import {
   Question,
   Response,
   ResponseInput,
+  QuestionId,
 } from './types';
 // import { Session } from 'inspector';
 
@@ -227,28 +228,9 @@ export async function insertResponse(responseValues: ResponseInput[]) {
   )[0];
 }
 
-export async function getResponsesWhereQuestionIdIs(id: number) {
+export async function getResponsesByQuestionId(id: number) {
   const responses = await sql<Response[]>`
   SELECT*from responses WHERE question_id = ${id}
   ;`;
-
-  // const camelResponses = camelcaseKeys(responses);
-  // const mappedResponses = camelResponses.map((r) => {
-  //   if (r.id !== undefined) {
-  //     return {
-  //       id: r.id,
-  //       questionId: r.questionId,
-  //       value: r.responseValue,
-  //     };
-  //   }
-  //   return null;
-  // });
-  // console.log('camelresponsedes', camelResponses);
-  // console.log('mappedresponsedes', mappedResponses);
-  // console.log('responses in database', responses);
-  // return mappedResponses;
-  // return camelcaseKeys(responses)[0];
-  return responses.map((response) => camelcaseKeys(response));
-
-  // responses.map((response: Response) => camelcaseKeys(response))[0];
+  return responses.map((response: Response) => camelcaseKeys(response));
 }

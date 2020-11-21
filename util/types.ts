@@ -60,3 +60,7 @@ export type ResponseInput = {
   questionId: number;
   responseValue: number;
 };
+
+export type QuestionId = {
+  questionId: number;
+};
