@@ -27,6 +27,15 @@ export default function Signup(props: { token: string }) {
           });
           const { success } = await response.json();
           if (success) {
+            //   async (e) => {
+            //     e.preventDefault();
+            //     const response = await fetch('/api/login', {
+            //       method: 'POST',
+            //       headers: { 'Content-Type': 'application/json' },
+            //       body: JSON.stringify({ username, password }),
+            //     });
+            //   };
+            // }
             router.push(`/login`);
           } else {
             if (response.status === 403) {

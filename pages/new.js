@@ -17,61 +17,127 @@ const mainStyles = css`
 export default function New(props) {
   const username = cookie.getJSON('username');
   const user = props.user;
+  const [errorMessage, setErrorMessage] = useState('');
+
   // const username = user.username;
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
   const router = useRouter();
-  // if (user.id !== 0) {
-  return (
-    //TODO input URL: make sure no spaces allowed
-    <React.Fragment>
-      <Layout username={username} css={mainStyles}>
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            const response = await fetch('/api/new', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                userId: user.id,
-                title: title,
-                customSlug: slug,
-              }),
-            });
-          }}
-        >
-          <br />
-          <br />
-          <br />
-          <input
-            onChange={(e) => {
-              setTitle(e.currentTarget.value);
-            }}
-            placeholder="My first Survey"
-          ></input>
-          <br />
-          <br />
-          www.survey.com/
-          <input
-            placeholder="custom-slug"
-            onChange={(e) => {
-              setSlug(e.currentTarget.value);
-            }}
-          />
-          <br />
-          <button
-            onClick={(e) => {
-              window.location.href = `/${slug}/edit`;
+  if (user.id !== 1) {
+    return (
+      //TODO input URL: make sure no spaces allowed
+      <React.Fragment>
+        <Layout username={username} css={mainStyles}>
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const response = await fetch('/api/new', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  userId: user.id,
+                  title: title,
+                  customSlug: slug,
+                }),
+              });
+              const { success } = await response.json();
+              if (success) {
+                router.push(`/login`);
+              } else {
+                if (response.status === 403) {
+                  setErrorMessage('Slug not available!');
+                } else setErrorMessage('That Failed!');
+              }
             }}
           >
-            Create survey
-          </button>
-        </form>
-      </Layout>
-    </React.Fragment>
+            <br />
+            <br />
+            <br />
+            <input
+              onChange={(e) => {
+                setTitle(e.currentTarget.value);
+              }}
+              placeholder="My first Survey"
+            ></input>
+            <br />
+            <br />
+            www.survey.com/
+            <input
+              placeholder="custom-slug"
+              onChange={(e) => {
+                setSlug(e.currentTarget.value);
+              }}
+            />
+            <br />
+            <button
+            //   onClick={(e) => {
+            //     window.location.href = `/${slug}/edit`;
+            //   }
+            // }
+            >
+              Create survey
+            </button>
+          </form>
+          {errorMessage}
+        </Layout>
+      </React.Fragment>
+    );
+  }
+  return (
+    <Layout username={username} css={mainStyles}>
+      You are not logged in
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const response = await fetch('/api/new', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId: user.id,
+              title: title,
+              customSlug: slug,
+            }),
+          });
+          const { success } = await response.json();
+          if (success) {
+            router.push(`/login`);
+          } else {
+            if (response.status === 403) {
+              setErrorMessage('Slug already in use. Try another one!');
+            } else setErrorMessage('That Failed!');
+          }
+        }}
+      >
+        <br />
+        <br />
+        <br />
+        <input
+          onChange={(e) => {
+            setTitle(e.currentTarget.value);
+          }}
+          placeholder="My first Survey"
+        ></input>
+        <br />
+        <br />
+        www.survey.com/
+        <input
+          placeholder="custom-slug"
+          onChange={(e) => {
+            setSlug(e.currentTarget.value);
+          }}
+        />
+        <br />
+        <button
+        // onClick={(e) => {
+        //   window.location.href = `/${slug}/edit`;
+        // }}
+        >
+          Create survey
+        </button>
+      </form>
+      {errorMessage}
+    </Layout>
   );
-  // }
-  // return <Layout>Hello World</Layout>;
 }
 
 export async function getServerSideProps(context) {

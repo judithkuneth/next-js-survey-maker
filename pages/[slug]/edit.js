@@ -23,7 +23,8 @@ export default function dashboard(props) {
     const survey = props.survey;
 
     function checkIfLoggedIn() {
-      if (user.id === 1) return (window.location.href = `/signup`);
+      if (user.id === 1)
+        return (window.location.href = `/signup?returnTo=/${slug}/edit`);
       else return (window.location.href = `/${slug}`);
     }
     return (

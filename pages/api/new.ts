@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 // import { useRouter } from 'next/router';
-import { addSurvey } from '../../util/database';
+import { addSurvey, getSurveyBySlug } from '../../util/database';
 
 export default async function newSurveyHandler(
   req: NextApiRequest,
@@ -10,6 +10,12 @@ export default async function newSurveyHandler(
   const { userId, title, customSlug } = req.body;
 
   console.log('req.body', req.body);
+
+  const survey = await getSurveyBySlug(customSlug);
+  console.log('typeof survey', typeof survey);
+  if (typeof survey !== 'undefined') {
+    return res.status(403).send({ success: false });
+  }
 
   try {
     await addSurvey(userId, title, customSlug);

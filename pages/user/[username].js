@@ -3,6 +3,8 @@
 import { jsx, css } from '@emotion/core';
 import Layout from '../../components/Layout';
 import nextCookies from 'next-cookies';
+import Link from 'next/link';
+import { useState } from 'react';
 // import {
 //   getQuestionWhereSurveyIdIs,
 //   getSurveysByUserId,
@@ -12,6 +14,42 @@ export default function dashboard(props) {
   const user = props.user;
   const surveys = props.surveys;
   const dummySurvey = props.dummySurvey;
+  const potentialUser = props.potentialUser;
+  const [copyText, setCopyText] = useState();
+
+  function copyToClipBoard(slug) {
+    console.log('slug', slug);
+    // setCopyText(slug);
+    // console.log('setcopytext', setCopyText(slug));
+    /* Get the text field */
+
+    // console.log('customslug', copyText);
+    // document.getElementById('myInput');
+
+    /* Select the text field */
+    // copyText.select();
+    // copyText.setSelectionRange(0, 99999);
+    /*For mobile devices*/
+
+    /* Copy the text inside the text field */
+    // document.execCommand('copy')
+
+    /* Alert the copied text */
+    alert('Copied the text: ' + slug);
+  }
+  if (!props.user)
+    return (
+      <Layout>
+        <h1>
+          You are trying to access {potentialUser}'s dashboard but you are not
+          logged in. Please login to get access{' '}
+        </h1>
+        <br />
+        <Link href="../login">
+          <button> Login</button>
+        </Link>
+      </Layout>
+    );
   if (dummySurvey)
     var surveyList = dummySurvey.map((dummy) => {
       return (
@@ -57,17 +95,25 @@ export default function dashboard(props) {
       }
       return (
         <div>
+          <input id="myInput" />
           <h2>{survey.title}</h2>
           <p>{checkStatus()}</p>
           <p>responses: 0</p>
           <button
             onClick={(e) => {
-              window.location.href = '/results';
+              window.location.href = `/${survey.customSlug}/stats`;
             }}
           >
             results
           </button>
-          <button>share</button>
+          <button
+            onClick={(e) => {
+              console.log('survey.customSlug', survey.customSlug);
+              copyToClipBoard(survey.customSlug);
+            }}
+          >
+            share
+          </button>
           <button
             onClick={(e) => {
               window.location.href = `/${survey.customSlug}/edit`;
@@ -125,6 +171,7 @@ export default function dashboard(props) {
 export async function getServerSideProps(context) {
   const { session } = nextCookies(context);
   const { getSessionByToken } = await import('../../util/database');
+  const potentialUser = context.query.username;
 
   if (session !== undefined) {
     const sessionByToken = await getSessionByToken(session);
@@ -148,4 +195,5 @@ export async function getServerSideProps(context) {
       props: { user: user, surveys: surveys },
     };
   }
+  return { props: { potentialUser: potentialUser } };
 }

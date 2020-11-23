@@ -12,6 +12,7 @@ export default function stats(props) {
   const survey = props.survey;
   const questions = props.questions;
   // questions = [{id:65, surveyId:1, itemorder: 0, questionType: 'x_slider',title:'dwda', valueMin: 1, valueMax: 2, descriptionMin: 'aw',descriptionMax: 'wwea'}{...}]
+  console.log('stats.js: questions', questions);
   const responses = props.responses;
   // responses = [
   //[
@@ -21,32 +22,59 @@ export default function stats(props) {
   // {...},{...},{...}
   // ]
   //]
+  console.log('stats.js: responses', responses);
 
-  const responsesSimplified = responses[0].concat(responses[1]);
-  console.log('simplified.lenght', responsesSimplified.length);
+  const responsesSimplified = responses.flat();
+  // responses[0].concat(responses[1]);
 
-  //const questionAndResponses = [{id:65,surveyId:1, ....., responses:{id:24, responseValue:0}}]
+  console.log(
+    'stats.js: simplified responses, .lenght',
+    responsesSimplified,
+    responsesSimplified.length,
+  );
+
+  // Solution 1: Write function getQuestionsAnswersBySurveyId(x) so that
+  //[{questionId: 65 [{responseId: 24, value:12}{responseId: 25, value:10}]}]
+
+  //const questionsAndResponses = [{questionId:65,surveyId:1, ....., responses:{id:24, responseValue:0}}]
+
+  // Solution 2: Combine arrays so that:
+  //const questionAndResponses = [{questionId:65,surveyId:1, ....., responses:{id:24, responseValue:0}}]
 
   // --------------- find out whats going on here!! ---------------
-  // const newQuestions = questions.map((question) => {
+  // const QuestionsAndResponses = questions.map((question) => {
   //   const newQuestionsArray = responsesSimplified.map((response) => {
   //     if (response.questionId === question.id)
   //       return {
-  //         title: question.title,
-  //         valueMin: question.valueMin,
-  //         valueMax: question.valueMax,
-  //         questionIdOne: question.id,
-  //         questionId: response.questionId,
-  //         responseId: response.id,
+  //         questionIdQuestion: question.id,
+  //         questionIdResponse: response.questionId,
   //         value: response.responseValue,
-  //         results: response,
+  //         //         title: question.title,
+  //         //         valueMin: question.valueMin,
+  //         //         valueMax: question.valueMax,
+  //         //         questionIdOne: question.id,
+  //         //         questionId: response.questionId,
+  //         //         responseId: response.id,
+  //         //
+  //         //         results: response,
   //       };
   //   });
 
   //   return newQuestionsArray;
   // });
 
-  // console.log('newQuestionsarray', newQuestions);
+  // console.log('QuestionsAndResponses', QuestionsAndResponses);
+
+  // const QandA = QuestionsAndResponses.map((response) => {
+  //   const cleanResponses = response.map((r) => {
+  //     if (r !== undefined) {
+  //       return r;
+  //     }
+  //   });
+  //   return cleanResponses;
+  // });
+
+  // console.log('QandA', QandA);
 
   // -----------------------------------------------------------------
 
@@ -56,13 +84,20 @@ export default function stats(props) {
         <h1>Stats</h1>
         {survey.title}
 
-        <BarChartComponent questions={questions} responses={responses} />
+        {/* <BarChartComponent
+          questions={questions}
+          responses={responsesSimplified}
+        /> */}
 
         {questions.map((question) => {
           return (
             <div>
               <br />
               {question.title}
+              <BarChartComponent
+                question={question}
+                responses={responsesSimplified}
+              />
               <br />
               {question.valueMin}
               {question.descriptionMin}
