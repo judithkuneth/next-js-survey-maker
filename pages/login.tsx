@@ -9,31 +9,65 @@ import { GetServerSidePropsContext } from 'next';
 import nextCookies from 'next-cookies';
 import cookie from 'js-cookie';
 
-export default function Login() {
+export default function Login(props: { redirectDestination: string }) {
   const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  // console.log('redirect in login', props.redirectDestination);
+  // console.log(
+  //   'redirect in login split',
+  //   props.redirectDestination.split('/')[0],
+  // );
+
+  function redirectSlug() {
+    if (props.redirectDestination !== '/') {
+      let redSlug = props.redirectDestination.split('/')[0];
+      return redSlug;
+    } else return '';
+  }
+  console.log('redirect destination in login wojho', props.redirectDestination);
+  console.log('redirectSlug()', redirectSlug());
+
   return (
     <Layout>
       <h1>Login</h1>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          const response = await fetch('/api/login', {
+          const response = await fetch('/api/loginandupdate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({
+              username,
+              password,
+              redirectSlug: redirectSlug(),
+            }),
           });
 
           const { success } = await response.json();
-
-          if (!success) {
-            setErrorMessage('Login failed');
-          } else {
+          if (success) {
             setErrorMessage('');
             cookie.set('username', `${username}`);
             router.push(`/user/${username}`);
+          }
+
+          // if (!success) {
+          //   setErrorMessage('Login failed');
+          // }
+          else {
+            //   console.log('successfully logedin');
+            setErrorMessage('Login failed');
+            //   cookie.set('username', `${username}`);
+            //   if (
+            //     props.redirectDestination !== undefined &&
+            //     props.redirectDestination !== ''
+            //   ) {
+            //     router.push(`/${props.redirectDestination}`);
+            //   } else {
+            //     router.push(`/user/${username}`);
+            //   }
           }
         }}
       >
@@ -62,7 +96,7 @@ export default function Login() {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { session, username } = nextCookies(context);
-
+  const redirectDestination = context?.query?.returnTo ?? '/';
   if (session !== undefined) {
     const { getSessionByToken } = await import('../util/database');
     const sessionByToken = await getSessionByToken(session);
@@ -73,20 +107,24 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const username = user.username;
     // user.createdAt = JSON.stringify(user.createdAt);
 
+    console.log('redirectDestination', redirectDestination);
+
     if (await isTokenValid(session)) {
       console.log('tokenvalid?yes');
-      return {
-        redirect: {
-          destination: `/user/${username}`,
-          permanent: false,
-        },
-      };
+
+      return { props: { redirectDestination } };
+      // return {
+      //   redirect: {
+      //     destination: `/user/${username}`,
+      //     permanent: false,
+      //   },
+      // };
     }
     console.log('istokenvalid? no');
 
-    return { props: {} };
+    return { props: { redirectDestination } };
   }
-  return { props: {} };
+  return { props: { redirectDestination } };
 }
 //   return { props: {} };
 // }

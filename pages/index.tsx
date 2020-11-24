@@ -52,6 +52,30 @@ export default function Home(props: Props) {
             <button>+ New Survey</button>
           </a>
         </Link>
+
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            const response = await fetch('/api/editsurvey', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                username: 'gloria',
+                slug: 'aaa',
+              }),
+            });
+            const { success } = await response.json();
+            if (success) {
+              console.log('success');
+            } else {
+              if (response.status === 403) {
+                console.log('User already exists!');
+              } else console.log('That Failed!');
+            }
+          }}
+        >
+          <button>Submit</button>
+        </form>
       </main>
 
       <footer> </footer>

@@ -4,8 +4,13 @@ import { jsx, css } from '@emotion/core';
 import Layout from '../components/Layout.js';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { GetServerSidePropsContext } from 'next';
 
-export default function Signup(props: { token: string }) {
+export default function Signup(props: {
+  token: string;
+  redirectDestination: string;
+}) {
+  console.log('log redirectDestination', props.redirectDestination);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
@@ -15,6 +20,9 @@ export default function Signup(props: { token: string }) {
       <h1>Signup</h1>
       <form
         onSubmit={async (e) => {
+          // if (props.redirectDestination !== '/') {
+          //   console.log('props.redirectDest !=== /');
+
           e.preventDefault();
           const response = await fetch('/api/signup', {
             method: 'POST',
@@ -27,21 +35,37 @@ export default function Signup(props: { token: string }) {
           });
           const { success } = await response.json();
           if (success) {
-            //   async (e) => {
-            //     e.preventDefault();
-            //     const response = await fetch('/api/login', {
-            //       method: 'POST',
-            //       headers: { 'Content-Type': 'application/json' },
-            //       body: JSON.stringify({ username, password }),
-            //     });
-            //   };
-            // }
-            router.push(`/login`);
+            console.log('success');
+
+            if (props.redirectDestination !== '/') {
+              console.log('props.redirectDest !=== /');
+              router.push(`/${props.redirectDestination}`);
+
+              // -----------------------------------------
+              // async (e) => {
+              //   e.preventDefault();
+              //   const response = await fetch('/api/editsurvey', {
+              //     method: 'POST',
+              //     headers: { 'Content-Type': 'application/json' },
+              //     body: JSON.stringify({ slug: 'aaa', username }),
+              //   });
+
+              //   const { success } = await response.json();
+
+              //   if (success) {
+              //     router.push(`/${props.redirectDestination}`);
+              //   } else {
+              //     setErrorMessage('That Failed!');
+              //   }
+              // };
+              //----------------------------------------
+            } else router.push(`/login`);
           } else {
             if (response.status === 403) {
               setErrorMessage('User already exists!');
             } else setErrorMessage('That Failed!');
           }
+          // } else router.push(`/login`);
         }}
       >
         <p>User name</p>
@@ -67,15 +91,18 @@ export default function Signup(props: { token: string }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   const Tokens = (await import('csrf')).default;
   const tokens = new Tokens();
   const secret = process.env.CSRF_TOKEN_SECRET;
+
+  const redirectDestination = context?.query?.returnTo ?? '/';
+  console.log('redirectDestination', redirectDestination);
 
   if (typeof secret === 'undefined') {
     throw new Error('CSRF_TOKEN_SECRET environment variable not configured!');
   }
   const token = tokens.create(secret);
 
-  return { props: { token } };
+  return { props: { token, redirectDestination } };
 }

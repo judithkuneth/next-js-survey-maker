@@ -24,7 +24,7 @@ export default function dashboard(props) {
 
     function checkIfLoggedIn() {
       if (user.id === 1)
-        return (window.location.href = `/signup?returnTo=/${slug}/edit`);
+        return (window.location.href = `/signup?returnTo=login?returnTo=${slug}/edit`);
       else return (window.location.href = `/${slug}`);
     }
     return (

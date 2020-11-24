@@ -42,7 +42,7 @@ export default function New(props) {
               });
               const { success } = await response.json();
               if (success) {
-                router.push(`/login`);
+                router.push(`/${slug}/edit`);
               } else {
                 if (response.status === 403) {
                   setErrorMessage('Slug not available!');
@@ -100,7 +100,7 @@ export default function New(props) {
           });
           const { success } = await response.json();
           if (success) {
-            router.push(`/login`);
+            router.push(`/${slug}/edit`);
           } else {
             if (response.status === 403) {
               setErrorMessage('Slug already in use. Try another one!');

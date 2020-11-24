@@ -15,27 +15,12 @@ export default function dashboard(props) {
   const surveys = props.surveys;
   const dummySurvey = props.dummySurvey;
   const potentialUser = props.potentialUser;
-  const [copyText, setCopyText] = useState();
 
   function copyToClipBoard(slug) {
-    console.log('slug', slug);
-    // setCopyText(slug);
-    // console.log('setcopytext', setCopyText(slug));
-    /* Get the text field */
-
-    // console.log('customslug', copyText);
-    // document.getElementById('myInput');
-
-    /* Select the text field */
-    // copyText.select();
-    // copyText.setSelectionRange(0, 99999);
-    /*For mobile devices*/
-
-    /* Copy the text inside the text field */
-    // document.execCommand('copy')
+    navigator.clipboard.writeText(`http://localhost:3000/${slug}`);
 
     /* Alert the copied text */
-    alert('Copied the text: ' + slug);
+    alert('Copied the text: ' + `http://localhost:3000/${slug}`);
   }
   if (!props.user)
     return (
@@ -108,8 +93,12 @@ export default function dashboard(props) {
           </button>
           <button
             onClick={(e) => {
-              console.log('survey.customSlug', survey.customSlug);
               copyToClipBoard(survey.customSlug);
+              // navigator.clipboard.writeText(
+              //   `http://localhost:3000/${survey.customSlug}`,
+              // );
+              // console.log('survey.customSlug', survey.customSlug);
+              // copyToClipBoard(survey.customSlug);
             }}
           >
             share

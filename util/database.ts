@@ -57,7 +57,7 @@ export async function getUserByUsername(username: string) {
   const user = await sql<User[]>`
   SELECT * FROM users WHERE username = ${username}`;
   console.log('getUserByUsername', user[0]);
-
+  console.log('return in DB user', user);
   return camelcaseKeys(user[0]);
 }
 
@@ -151,6 +151,13 @@ export async function getSurveyBySlug(slug: string) {
   console.log('getSurveybySlug in database', surveys[0]);
 
   return surveys.map((u) => camelcaseKeys(u))[0];
+}
+
+export async function editSurveyWhereSlugIs(slug: string, userId: number) {
+  console.log('in DB: update survey by slug:', slug, 'userId:', userId);
+  const survey = await sql<Survey[]>`
+UPDATE surveys SET user_id = ${userId} WHERE custom_slug = ${slug};`;
+  return camelcaseKeys(survey)[0];
 }
 
 export async function deleteSurveyWhereIdIs(id: number) {
