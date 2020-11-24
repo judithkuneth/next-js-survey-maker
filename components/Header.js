@@ -28,26 +28,35 @@ const headerStyles = css`
 
 export default function Header(props) {
   const username = props.username;
+  console.log('username in header', username);
   return (
     <header css={headerStyles}>
       <nav>
         <Link href="/">
-          <a>Home</a>
+          <a>Logo</a>
         </Link>
-        <Link href={`/user/${username}`}>
-          <a>Dashboard</a>
-        </Link>
+
         <Link href="/new">
           <a>
             <button>+ New</button>
           </a>
         </Link>
-        <Link href="/login">
-          <a>Login</a>
-        </Link>
-        <Link href="/signup">
-          <a>Signup</a>
-        </Link>
+
+        {username === undefined ? (
+          <Link href="/login">
+            <a>Login</a>
+          </Link>
+        ) : (
+          <div>
+            <Link href={`/user/${username}`}>
+              <a>Dashboard</a>
+            </Link>
+
+            <Link href="/logout">
+              <a>logout</a>
+            </Link>
+          </div>
+        )}
       </nav>
     </header>
   );

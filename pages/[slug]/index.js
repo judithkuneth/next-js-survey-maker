@@ -2,6 +2,7 @@ import Layout from '../../components/Layout';
 import nextCookies from 'next-cookies';
 import { useState } from 'react';
 import Link from 'next/link';
+import { isTokenValid } from '../../util/auth';
 
 export default function slug(props) {
   const slug = props.slug;
@@ -9,7 +10,7 @@ export default function slug(props) {
 
   if (!props.questions)
     return (
-      <Layout>
+      <Layout username={props.user.username}>
         <h1>This page does not exists</h1>
         <br />
         <Link href="../login">
@@ -108,12 +109,12 @@ export default function slug(props) {
   // );
 
   return (
-    <Layout>
+    <Layout username={props.user.username}>
       <p>www.surveymaker.com/{slug}</p>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          const response = await fetch('/api/insertresponse', {
+          const response = await fetch('/api/addresponse', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -136,10 +137,36 @@ export async function getServerSideProps(context) {
   const { getSurveyBySlug } = await import('../../util/database');
   const survey = await getSurveyBySlug(slug);
 
+  console.log('check', await isTokenValid(session));
+
   if (survey !== undefined) {
     const { getQuestionWhereSurveyIdIs } = await import('../../util/database');
     const questions = await getQuestionWhereSurveyIdIs(survey.id);
     console.log('gettingquestions by surveyid:', questions);
+
+    if (await isTokenValid(session)) {
+      console.log('token valid');
+      const { getSessionByToken } = await import('../../util/database');
+      const sessionByToken = await getSessionByToken(session);
+      console.log('sessionByToken', sessionByToken);
+
+      const userId = sessionByToken.userId;
+      console.log('userId', sessionByToken.userId);
+
+      const { getUserById } = await import('../../util/database');
+      const user = await getUserById(userId);
+      console.log('user', user);
+      user.createdAt = JSON.stringify(user.createdAt);
+      return {
+        props: {
+          slug,
+          survey,
+          questions,
+          user,
+        },
+      };
+    }
+
     return {
       props: {
         slug,

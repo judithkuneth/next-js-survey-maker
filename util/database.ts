@@ -86,6 +86,13 @@ export async function deleteExpiredSessions() {
   DELETE from sessions WHERE expiry_timestamp < NOW()`;
 }
 
+export async function deleteSessionByToken(token: string | undefined) {
+  if (typeof token === 'undefined') return;
+  await sql`
+    DELETE FROM sessions WHERE token = ${token};
+  `;
+}
+
 export async function getSessionByToken(token: string) {
   const sessions = await sql<Session[]>`
   SELECT * FROM sessions WHERE token = ${token}`;

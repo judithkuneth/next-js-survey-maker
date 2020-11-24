@@ -15,6 +15,12 @@ export default function Signup(props: {
   const [password, setPassword] = useState('');
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState('');
+
+  function getPath() {
+    if (props.redirectDestination !== '/') {
+      return `/${props.redirectDestination}`;
+    } else return '/login';
+  }
   return (
     <Layout>
       <h1>Signup</h1>
@@ -85,7 +91,7 @@ export default function Signup(props: {
         <button>Signup</button>
       </form>
       <br />
-      <a href="/login">I already have an account</a>
+      <a href={getPath()}>I already have an account</a>
       <p style={{ color: 'red' }}>{errorMessage}</p>
     </Layout>
   );

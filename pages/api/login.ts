@@ -5,6 +5,8 @@ import {
   getUserByUsername,
   deleteExpiredSessions,
   insertSession,
+  editSurveyWhereSlugIs,
+  getSurveyBySlug,
 } from '../../util/database';
 import argon2 from 'argon2';
 
@@ -12,8 +14,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const { username, password } = req.body;
+  const { username, password, redirectSlug } = req.body;
   const user = await getUserByUsername(username);
+  console.log('req.body yolo', req.body);
 
   if (typeof user === 'undefined') {
     return res.status(401).send({ success: false });
@@ -43,6 +46,17 @@ export default async function handler(
   });
 
   res.setHeader('Set-Cookie', sessionCookie);
+  console.log('redirectSlug in loginandupdate', redirectSlug);
+  console.log('typeof redirectSlug in loginandupdate', typeof redirectSlug);
+  if (redirectSlug !== undefined && redirectSlug !== '') {
+    const survey = await getSurveyBySlug(redirectSlug);
+
+    try {
+      await editSurveyWhereSlugIs(redirectSlug, user.id);
+    } catch (err) {
+      return res.status(500).send({ success: false });
+    }
+  }
 
   console.log('req.body', req.body);
   res.send({ success: true });

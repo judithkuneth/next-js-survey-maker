@@ -46,11 +46,17 @@ export default function EditQuestionComponent(props: { question: Question }) {
           }}
         />
         <br />
-        <select name="questionType" id="questionType">
-          <option value="x_slider">x slider</option>
-          <option value="y_slider">y slider</option>
-          <option value="gauge">gauge</option>
-          <option value="binary">gwo Buttons</option>
+        <select
+          name="questionType"
+          id="questionType"
+          onChange={(e) => {
+            setQuestionType(e.currentTarget.value);
+          }}
+        >
+          <option value="x_slider">slider horizontal</option>
+          <option value="y_slider">slider vertical</option>
+          <option value="gauge">gauge (premium)</option>
+          <option value="binary">buttons Y/N</option>
         </select>
         <br />
         <br />
@@ -105,7 +111,7 @@ export default function EditQuestionComponent(props: { question: Question }) {
             location.reload(true);
           }}
         >
-          delete this question
+          delete question
         </button>
       </form>
       {/* </Link> */}

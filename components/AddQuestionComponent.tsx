@@ -46,7 +46,7 @@ export default function AddQuestionComponent(props: { survey: Survey }) {
           }}
         />
         <input
-          placeholder="description min"
+          placeholder="description"
           onChange={(e) => {
             setDescriptionMin(e.currentTarget.value);
           }}
@@ -73,7 +73,6 @@ export default function AddQuestionComponent(props: { survey: Survey }) {
           Add question
         </button>
       </form>
-      <button>+Question</button>
     </>
   );
 }

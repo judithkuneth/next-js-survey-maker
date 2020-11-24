@@ -31,7 +31,7 @@ export default function New(props) {
           <form
             onSubmit={async (e) => {
               e.preventDefault();
-              const response = await fetch('/api/new', {
+              const response = await fetch('/api/addsurvey', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -89,7 +89,7 @@ export default function New(props) {
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          const response = await fetch('/api/new', {
+          const response = await fetch('/api/addsurvey', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
