@@ -52,30 +52,30 @@ export default function dashboard(props) {
           <br />
 
           {user.id === 1 ? (
-            <div>
-              <button
-                onClick={(e) => {
-                  window.location.href = `/signup?returnTo=login?returnTo=${slug}/edit`;
-                }}
-              >
-                preview
-              </button>
-              <button
-                onClick={(e) => {
-                  window.location.href = `/signup?returnTo=login?returnTo=${slug}/edit`;
-                }}
-              >
-                save as draft
-              </button>
-              <button
-                onClick={(e) => {
-                  window.location.href = `/signup?returnTo=login?returnTo=${slug}/edit`;
-                }}
-              >
-                publish
-              </button>
-            </div>
+            // <div>
+            //   <button
+            //     onClick={(e) => {
+            //       window.location.href = `/signup?returnTo=login?returnTo=${slug}/edit`;
+            //     }}
+            //   >
+            //     preview
+            //   </button>
+            <button
+              onClick={(e) => {
+                window.location.href = `/signup?returnTo=login?returnTo=${slug}/edit`;
+              }}
+            >
+              create survey
+            </button>
           ) : (
+            // <button
+            //   onClick={(e) => {
+            //     window.location.href = `/signup?returnTo=login?returnTo=${slug}/edit`;
+            //   }}
+            // >
+            //   publish
+            // </button>
+            // </div>
             <div>
               <button
                 onClick={(e) => {
@@ -84,7 +84,8 @@ export default function dashboard(props) {
               >
                 preview
               </button>
-              <button
+              <button>share</button>
+              {/* <button
                 onClick={(e) => {
                   window.location.href = `/${username}`;
                 }}
@@ -97,7 +98,7 @@ export default function dashboard(props) {
                 }}
               >
                 publish
-              </button>
+              </button> */}
             </div>
           )}
         </div>
