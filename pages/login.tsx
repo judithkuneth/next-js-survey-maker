@@ -9,6 +9,55 @@ import { GetServerSidePropsContext } from 'next';
 import nextCookies from 'next-cookies';
 import cookie from 'js-cookie';
 
+const formStyles = css`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 50px;
+  max-width: 500px;
+  align-content: center;
+
+  h1 {
+    color: #d5d4d4;
+    margin-bottom: 10px;
+  }
+  div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    p {
+      color: #f7fcfc;
+      font-weight: 500;
+      margin-right: 5px;
+    }
+
+    a {
+      font-weight: 600;
+      color: #14a9a9;
+    }
+  }
+
+  input {
+    border-radius: 10px;
+    padding-left: 5px;
+    margin: 5px 0px;
+    // width: 100%;
+    // height: 20px;
+    font-size: 18px;
+  }
+  button {
+    width: 191px;
+    color: #f7fcfc;
+    border-color: #f7fcfc;
+    font-size: 16px;
+    font-weight: 550;
+    border: none;
+    padding: 0px 0px 0px 5px;
+    margin-top: 5px;
+  }
+`;
+
 export default function Login(props: { redirectDestination: string }) {
   const router = useRouter();
   const [username, setUsername] = useState('');
@@ -32,8 +81,8 @@ export default function Login(props: { redirectDestination: string }) {
 
   return (
     <Layout>
-      <h1>Login</h1>
       <form
+        css={formStyles}
         onSubmit={async (e) => {
           e.preventDefault();
           const response = await fetch('/api/login', {
@@ -71,23 +120,25 @@ export default function Login(props: { redirectDestination: string }) {
           }
         }}
       >
-        <p>Email</p>
-        <input type="email"></input>
-        or
-        <p>Username</p>
+        <h1>Login</h1>
         <input
+          placeholder="username"
           value={username}
           onChange={(e) => setUsername(e.currentTarget.value)}
         />
-        <p>Password</p>
+
         <input
+          placeholder="username"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.currentTarget.value)}
         ></input>
         <button>Login</button>
         <br />
-        <a href="/signup">New user? Signup here</a>
+        <div>
+          <p>New user? </p>
+          <a href="/signup">Signup now</a>
+        </div>
         <p style={{ color: 'red' }}>{errorMessage}</p>
       </form>
     </Layout>

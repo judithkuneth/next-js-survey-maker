@@ -8,6 +8,18 @@ import AddQuestionComponent from '../../components/AddQuestionComponent';
 import Link from 'next/link';
 import { isTokenValid } from '../../util/auth';
 
+const componentStyles = css`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: center;
+  // margin: 10px;
+  // max-width: 400px;
+  div {
+    align-content: center;
+  }
+`;
+
 // import { getQuestionWhereSurveyIdIs,getSurveysByUserId } from '../../util/database';
 
 export default function dashboard(props) {
@@ -30,8 +42,18 @@ export default function dashboard(props) {
     // }
     return (
       <Layout username={username}>
-        <h2>{survey.title}</h2>
-        <div>
+        <div css={componentStyles}>
+          <div
+            style={{
+              backgroundColor: '#F7FCFC',
+              margin: '10px',
+              padding: '20px',
+              borderRadius: '10px',
+            }}
+          >
+            <h1>{survey.title}</h1>
+            <h4>www.survey.com/{survey.customSlug}</h4>
+          </div>
           {questions.map((question) => {
             return (
               <div>
@@ -39,53 +61,71 @@ export default function dashboard(props) {
                   question={question}
                   surveyId={survey.id}
                 />
-                <br />
-                <br />
               </div>
             );
           })}
 
-          <h2>Add a new question</h2>
           <AddQuestionComponent survey={survey} />
-          <br />
-          <br />
-          <br />
-
-          {user.id === 1 ? (
-            // <div>
-            //   <button
-            //     onClick={(e) => {
-            //       window.location.href = `/signup?returnTo=login?returnTo=${slug}/edit`;
-            //     }}
-            //   >
-            //     preview
-            //   </button>
-            <button
-              onClick={(e) => {
-                window.location.href = `/signup?returnTo=login?returnTo=${slug}/edit`;
-              }}
-            >
-              create survey
-            </button>
-          ) : (
-            // <button
-            //   onClick={(e) => {
-            //     window.location.href = `/signup?returnTo=login?returnTo=${slug}/edit`;
-            //   }}
-            // >
-            //   publish
-            // </button>
-            // </div>
-            <div>
+          <div
+            style={{
+              // backgroundColor: '#F7FCFC',
+              margin: '10px 10px',
+              padding: '0px 0px',
+              borderRadius: '10px',
+            }}
+          >
+            {user.id === 1 ? (
+              // <div>
+              //   <button
+              //     onClick={(e) => {
+              //       window.location.href = `/signup?returnTo=login?returnTo=${slug}/edit`;
+              //     }}
+              //   >
+              //     preview
+              //   </button>
               <button
+                style={{ width: '100%' }}
                 onClick={(e) => {
-                  window.location.href = `/${slug}/view`;
+                  window.location.href = `/signup?returnTo=login?returnTo=${slug}/edit`;
                 }}
               >
-                preview
+                create survey
               </button>
-              <button>share</button>
-              {/* <button
+            ) : (
+              // <button
+              //   onClick={(e) => {
+              //     window.location.href = `/signup?returnTo=login?returnTo=${slug}/edit`;
+              //   }}
+              // >
+              //   publish
+              // </button>
+              // </div>
+              <div>
+                <button
+                  style={{
+                    backgroundColor: '#C1BFBF',
+                    color: '#F7FCFC',
+                    fontWeight: '650',
+                    marginRight: '20px',
+                  }}
+                  onClick={(e) => {
+                    window.location.href = `/user/${username}`;
+                  }}
+                >
+                  RETURN
+                </button>
+                <button
+                  style={{
+                    color: '#F7FCFC',
+                    fontWeight: '650',
+                  }}
+                  onClick={(e) => {
+                    window.location.href = `/${slug}`;
+                  }}
+                >
+                  VIEW SURVEY
+                </button>
+                {/* <button
                 onClick={(e) => {
                   window.location.href = `/${username}`;
                 }}
@@ -99,8 +139,9 @@ export default function dashboard(props) {
               >
                 publish
               </button> */}
-            </div>
-          )}
+              </div>
+            )}
+          </div>
         </div>
       </Layout>
     );

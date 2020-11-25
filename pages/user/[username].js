@@ -10,6 +10,68 @@ import { useState } from 'react';
 //   getSurveysByUserId,
 // } from '../util/database';
 
+const dashboardStyles = css`
+  display: flex;
+  flex-direction: column;
+  margin: 30px 10px;
+
+  h3 {
+    color: #d5d4d4;
+    font-weight: 350;
+    font-size: 24px;
+  }
+  button {
+    color: #f7fcfc;
+  }
+`;
+
+const surveyStyles = css`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  // justify-content: center;
+  margin: 20px 0px;
+  padding: 10px;
+  background-color: #f7fcfc;
+  border-radius: 10px;
+  max-width: 500px;
+  h1 {
+    margin-bottom: 5px;
+  }
+  div {
+    margin: 5px 0px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+    a {
+      color: #878787;
+      background-color: #e9ebeb;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      border-radius: 10px;
+      padding: 5px 10px;
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        h2 {
+          margin-right: 4px;
+        }
+        p {
+          color: #878787;
+        }
+      }
+    }
+  }
+`;
+
 export default function dashboard(props) {
   const user = props.user;
   const surveys = props.surveys;
@@ -39,7 +101,7 @@ export default function dashboard(props) {
     var surveyList = dummySurvey.map((dummy) => {
       return (
         <div>
-          <h2>{dummy.title}</h2>
+          <h3>{dummy.title}</h3>
           draft
           <br />
           responses: TODO
@@ -67,7 +129,7 @@ export default function dashboard(props) {
               window.location.href = '/new';
             }}
           >
-            + Create New Survey
+            + NEW SURVEY
           </button>
         </div>
       );
@@ -79,39 +141,99 @@ export default function dashboard(props) {
         else return 'published';
       }
       return (
-        <div>
-          <input id="myInput" />
-          <h2>{survey.title}</h2>
-          <p>{checkStatus()}</p>
-          <p>responses: 0</p>
-          <button
-            onClick={(e) => {
-              window.location.href = `/${survey.customSlug}/stats`;
+        <div css={surveyStyles}>
+          <h1>{survey.title}</h1>
+          {/* <p>{checkStatus()}</p> */}
+
+          <div
+            style={{
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              backgroundColor: '#e9ebeb',
+              borderRadius: '10px',
             }}
           >
-            results
-          </button>
-          <button
+            <Link href="">www.surey.com/ux101</Link>
+
+            <button
+              style={{
+                backgroundColor: '#C1BFBF',
+                color: '#767474',
+                fontSize: '18px',
+                padding: '5px',
+                height: '30px',
+                width: '70px',
+                fontSize: '18px',
+                // marginTop: '10px',
+              }}
+              onClick={(e) => {
+                copyToClipBoard(survey.customSlug);
+                // navigator.clipboard.writeText(
+                //   `http://localhost:3000/${survey.customSlug}`,
+                // );
+                // console.log('survey.customSlug', survey.customSlug);
+                // copyToClipBoard(survey.customSlug);
+              }}
+            >
+              share
+            </button>
+          </div>
+          <div>
+            <div>
+              <div>
+                <h2>0</h2>
+                <p>questions</p>
+              </div>
+              <button
+                style={{
+                  backgroundColor: '#C1BFBF',
+                  color: '#F7FCFC',
+                  fontSize: '18px',
+                  padding: '2px',
+                  height: '38px',
+                  marginTop: '10px',
+                }}
+                onClick={(e) => {
+                  window.location.href = `/${survey.customSlug}/edit`;
+                }}
+              >
+                edit
+              </button>
+            </div>
+            <div>
+              {/*TODO: Refresh onclick*/}
+
+              {/* <button
             onClick={(e) => {
-              copyToClipBoard(survey.customSlug);
-              // navigator.clipboard.writeText(
-              //   `http://localhost:3000/${survey.customSlug}`,
-              // );
-              // console.log('survey.customSlug', survey.customSlug);
-              // copyToClipBoard(survey.customSlug);
+              window.location.href = `/${survey.customSlug}`;
             }}
           >
-            share
-          </button>
-          <button
-            onClick={(e) => {
-              window.location.href = `/${survey.customSlug}/edit`;
-            }}
-          >
-            edit
-          </button>
-          {/*TODO: Refresh onclick*/}
-          <button
+            publish
+          </button> */}
+
+              {/* <div> */}
+              <div>
+                <h2>0</h2>
+                <p>responses</p>
+              </div>
+              <button
+                style={{
+                  color: '#F7FCFC',
+                  fontSize: '18px',
+                  padding: '2px',
+                  height: '38px',
+                  marginTop: '10px',
+                }}
+                onClick={(e) => {
+                  window.location.href = `/${survey.customSlug}/stats`;
+                }}
+              >
+                see results
+              </button>
+              {/* </div> */}
+            </div>
+          </div>
+          {/* <button
             onClick={async (e) => {
               const response = await fetch('/api/deletesurvey', {
                 method: 'POST',
@@ -123,35 +245,25 @@ export default function dashboard(props) {
             }}
           >
             delete
-          </button>
-          <button
-            onClick={(e) => {
-              window.location.href = `/${survey.customSlug}`;
-            }}
-          >
-            publish
-          </button>
-          <br />
-          <br />
-          <br />
-
-          <button
-            onClick={(e) => {
-              window.location.href = '/new';
-            }}
-          >
-            + Create New Survey
-          </button>
+          </button> */}
         </div>
       );
     });
   console.log('fuckin f´surveys', surveys);
   return (
     <Layout username={user.username}>
-      <h2>Welcome {user.username}!</h2>
-      <div>
-        <h3>Here are your surveys:</h3>
-        <h2>{surveyList}</h2>
+      <div css={dashboardStyles}>
+        <h3>Welcome {user.username}!</h3>
+
+        {surveyList}
+        <button
+          style={{ width: '100%' }}
+          onClick={(e) => {
+            window.location.href = '/new';
+          }}
+        >
+          + NEW SURVEY
+        </button>
       </div>
     </Layout>
   );
