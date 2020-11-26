@@ -61,8 +61,7 @@ export default function AddQuestionComponent(props: { survey: Survey }) {
     }
   `;
 
-  async function onSubmitFunction(e) {
-    e.preventDefault();
+  async function onSubmitFunction() {
     const response = await fetch('/api/addquestion', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -87,7 +86,7 @@ export default function AddQuestionComponent(props: { survey: Survey }) {
     <div css={componentStyles}>
       <form
         onSubmit={(e) => {
-          onSubmitFunction(e);
+          e.preventDefault, onSubmitFunction();
         }}
       >
         <input
