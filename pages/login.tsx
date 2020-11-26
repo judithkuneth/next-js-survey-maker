@@ -98,7 +98,7 @@ export default function Login(props: { redirectDestination: string }) {
           const { success } = await response.json();
           if (success) {
             setErrorMessage('');
-            cookie.set('username', `${username}`);
+            // cookie.set('username', `${username}`);
             router.push(`/user/${username}`);
           }
 

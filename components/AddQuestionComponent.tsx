@@ -61,25 +61,33 @@ export default function AddQuestionComponent(props: { survey: Survey }) {
     }
   `;
 
+  async function onSubmitFunction(e) {
+    e.preventDefault();
+    const response = await fetch('/api/addquestion', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        surveyId: surveyId,
+        itemOrder: itemOrder,
+        questionType: questionType,
+        title: title,
+        valueMin: valueMin,
+        valueMax: valueMax,
+        descriptionMin: descriptionMin,
+        descriptionMax: descriptionMax,
+      }),
+    });
+    const { success } = await response.json();
+    if (success) {
+      location.reload(true);
+    }
+  }
+
   return (
     <div css={componentStyles}>
       <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          const response = await fetch('/api/addquestion', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              surveyId: surveyId,
-              itemOrder: itemOrder,
-              questionType: questionType,
-              title: title,
-              valueMin: valueMin,
-              valueMax: valueMax,
-              descriptionMin: descriptionMin,
-              descriptionMax: descriptionMax,
-            }),
-          });
+        onSubmit={(e) => {
+          onSubmitFunction(e);
         }}
       >
         <input
@@ -133,9 +141,9 @@ export default function AddQuestionComponent(props: { survey: Survey }) {
         </div>
 
         <button
-          onClick={(e) => {
-            location.reload(true);
-          }}
+        // onClick={(e) => {
+        //   location.reload(true);
+        // }}
         >
           Add question
         </button>

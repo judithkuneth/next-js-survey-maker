@@ -1,4 +1,12 @@
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import {
+  BarChart,
+  ResponsiveContainer,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+} from 'recharts';
 
 export default function BarChartComponent(props) {
   const responses = props.responses;
@@ -56,17 +64,19 @@ export default function BarChartComponent(props) {
 
   // console.log('responses', responses);
   return (
-    <BarChart
-      width={600}
-      height={300}
-      data={barChartData}
-      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-    >
-      <XAxis dataKey="value" />
+    <ResponsiveContainer width="100%" height={300}>
+      <BarChart
+        // width={400}
+        // height={300}
+        data={barChartData}
+        margin={{ top: 10, right: 10, left: 10, bottom: 50 }}
+      >
+        <XAxis dataKey="value" />
 
-      <Tooltip />
+        <Tooltip />
 
-      <Bar dataKey="n" fill="#30CDCD" />
-    </BarChart>
+        <Bar dataKey="n" fill="#30CDCD" />
+      </BarChart>
+    </ResponsiveContainer>
   );
 }

@@ -1,24 +1,79 @@
+/** @jsx jsx */
+/** @jsxRuntime classic */
+import { jsx, css } from '@emotion/core';
 import Layout from '../../components/Layout';
 import nextCookies from 'next-cookies';
 import { useState } from 'react';
 import Link from 'next/link';
 import { isTokenValid } from '../../util/auth';
 
+const formStyles = css`
+display: flex;
+  flex-direction: column;
+  // align-items: center;
+  align-items: center;
+  h1{color:#767474;}
+form{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  margin-top: 50px;
+  background-color: #f7fcfc;
+  border-radius: 10px;
+  margin: 10px;
+  padding: 20px;
+  width: 80%;
+  max-width:500px;
+  h2{margin: 60px 0px 20px 0px}
+  button{
+    width: 100%;
+    margin-top:50px;
+    border-color: #f7fcfc;
+    font-size: 16px;
+    font-weight: 500;
+    color:#f7fcfc;
+  }
+  
+  // algn-self: center;}
+`;
+
+const QuestionStyles = css`
+  display: flex;
+  flex-direction: column;
+  // justify-content: space-between;
+  // margin: 10px;
+  input {
+    width: 100%;
+  }
+  div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    // margin-top: 20px;
+  }
+`;
+
 export default function slug(props) {
   const slug = props.slug;
   const survey = props.survey;
+  const loggedIn = props.loggedIn;
 
-  if (!props.questions)
-    return (
-      <Layout username={props.user.username}>
-        <h1>This page does not exists</h1>
-        <br />
-        <Link href="../login">
-          <button> Login</button>
-        </Link>
-      </Layout>
-    );
-
+  if (!props.questions) {
+    if (loggedIn) {
+      return (
+        <Layout username={props.user.username}>
+          <h3 style={{ color: '#d5d4d4' }}>Oops..This page does not exist</h3>
+        </Layout>
+      );
+    } else
+      return (
+        <Layout>
+          <h3 style={{ color: '#d5d4d4' }}>Oops..This page does not exist</h3>
+        </Layout>
+      );
+    const questions = props.questions;
+  }
   const questions = props.questions;
 
   const defaultValues = questions.map((question) => {
@@ -68,21 +123,19 @@ export default function slug(props) {
 
   const listOfQuestions = questions.map((question) => {
     return (
-      <div>
+      <div css={QuestionStyles}>
         <h2>{question.title}</h2>
-        <br />
-        <br />
-        {question.descriptionMin}({question.valueMin})
+
         <input
           onChange={(e) => {
             updateResponseValues(question.id, Number(e.currentTarget.value));
 
-            console.log(
-              'update response with id',
-              question.id,
-              'current value',
-              e.currentTarget.value,
-            );
+            // console.log(
+            //   'update response with id',
+            //   question.id,
+            //   'current value',
+            //   e.currentTarget.value,
+            // );
           }}
           type="range"
           min={`${question.valueMin}`}
@@ -93,12 +146,15 @@ export default function slug(props) {
             responseValues.find((r) => r.questionId === question.id)
               .responseValue
           }
-          // defaultValue={`${question.valueMin}`}
         ></input>
-        {question.descriptionMax}({question.valueMax})
-        <br />
-        <br />
-        <input />
+        <div>
+          <div>
+            {question.descriptionMin}({question.valueMin})
+          </div>
+          <div>
+            {question.descriptionMax}({question.valueMax})
+          </div>
+        </div>
       </div>
     );
   });
@@ -108,27 +164,75 @@ export default function slug(props) {
   //   document.getElementById(`${question.id}`).value,
   // );
 
-  return (
-    <Layout username={props.user.username}>
-      <p>www.surveymaker.com/{slug}</p>
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          const response = await fetch('/api/addresponse', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              responseValues: responseValues,
-            }),
-          });
-        }}
-      >
-        {listOfQuestions}
-        <button>Submit</button>
-      </form>
-    </Layout>
-  );
+  if (loggedIn) {
+    return (
+      <Layout username={props.user.username}>
+        <div css={formStyles}>
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const response = await fetch('/api/addresponse', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  responseValues: responseValues,
+                }),
+              });
+            }}
+          >
+            <h1>{survey.title}</h1>
+            {listOfQuestions}
+            <button>SUBMIT</button>
+          </form>
+        </div>
+      </Layout>
+    );
+  } else
+    return (
+      <Layout>
+        <div css={formStyles}>
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const response = await fetch('/api/addresponse', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  responseValues: responseValues,
+                }),
+              });
+            }}
+          >
+            <h1>{survey.title}</h1>
+            {listOfQuestions}
+            <button>SUBMIT</button>
+          </form>
+        </div>
+      </Layout>
+    );
 }
+
+//   return (
+//     <Layout username={props.user.username}>
+//       <p>www.surveymaker.com/{slug}</p>
+//       <form
+//         onSubmit={async (e) => {
+//           e.preventDefault();
+//           const response = await fetch('/api/addresponse', {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify({
+//               responseValues: responseValues,
+//             }),
+//           });
+//         }}
+//       >
+//         {listOfQuestions}
+//         <button>Submit</button>
+//       </form>
+//     </Layout>
+//   );
+// }
 
 export async function getServerSideProps(context) {
   const slug = context.query.slug;
@@ -163,6 +267,7 @@ export async function getServerSideProps(context) {
           survey,
           questions,
           user,
+          loggedIn: true,
         },
       };
     }
@@ -172,6 +277,7 @@ export async function getServerSideProps(context) {
         slug,
         survey,
         questions,
+        loggedIn: false,
       },
     };
   }

@@ -16,9 +16,10 @@ const componentStyles = css`
   // flex-wrap: wrap;
   justify-content: center;
   margin: 10px;
-  // width: 200px;
 
   form {
+    width: 90%;
+    max-width: 500px;
     // width: 266px;
     height: 220px;
     background-color: #f7fcfc;
@@ -139,7 +140,6 @@ export default function New(props) {
   }
   return (
     <Layout username={username}>
-      You are not logged in
       <div css={componentStyles}>
         <form
           onSubmit={async (e) => {

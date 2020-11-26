@@ -1,10 +1,40 @@
 /** @jsx jsx */
 /** @jsxRuntime classic */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import Layout from '../../components/Layout';
 import nextCookies from 'next-cookies';
 import { isTokenValid } from '../../util/auth';
 import BarChartComponent from '../../components/BarChartComponent';
+
+const layoutStyles = css`
+display: flex;
+  flex-direction: column;
+  // align-items: center;
+  align-items: center;
+  h1{color:#767474;margin:30px 0px}
+div{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  // margin-top: 50px;
+  background-color: #f7fcfc;
+  border-radius: 10px;
+  margin: 10px 0px;
+  // padding: 20px;
+  width: 90%;
+  max-width: 500px;
+  // max-width:500px;
+  h2{margin: 0px 0px 20px 0px}
+  // button{
+  //   width: 100%;
+  //   margin-top:50px;
+  //   border-color: #f7fcfc;
+  //   font-size: 16px;
+  //   font-weight: 500;
+  //   color:#f7fcfc;
+  // }
+  `;
 
 export default function stats(props) {
   if (props.access === true) {
@@ -23,49 +53,61 @@ export default function stats(props) {
 
     return (
       <Layout username={props.user.username}>
-        <h1>Stats</h1>
-        {survey.title}
-        {questions.map((question) => {
-          return (
-            <div>
-              <br />
-              {question.title}
-              <BarChartComponent
-                question={question}
-                responses={responsesSimplified}
-              />
-              <br />
-              {question.valueMin}
-              {question.descriptionMin}
-              <input type="range"></input>
-              {question.valueMax}
-              {question.descriptionMay}
-              <br />
-            </div>
-          );
-        })}
+        <div css={layoutStyles}>
+          <div>
+            <h1>{survey.title}</h1>
 
-        {responses[0].map((response) => {
-          return (
-            <div>
-              <br />
-              id: {response.questionId}
-              <br />
-              id: {response.id}
-              <br />
-              value: {response.responseValue}
-              <br />
-            </div>
-          );
-        })}
+            {questions.map((question) => {
+              return (
+                <div>
+                  <h2>{question.title}</h2>
+                  {/* <div> */}
+                  <BarChartComponent
+                    question={question}
+                    responses={responsesSimplified}
+                  />
+                  {/* </div> */}
+                  {/* <br />
+                  {question.valueMin}
+                  {question.descriptionMin}
+                  <input type="range"></input>
+                  {question.valueMax}
+                  {question.descriptionMay}
+                  <br /> */}
+                </div>
+              );
+            })}
+
+            {/* {responses[0].map((response) => {
+              return (
+                <div>
+                  <br />
+                  id: {response.questionId}
+                  <br />
+                  id: {response.id}
+                  <br />
+                  value: {response.responseValue}
+                  <br />
+                </div>
+              );
+            })} */}
+          </div>
+        </div>
       </Layout>
     );
-  } else
+  }
+  if (props.user !== undefined) {
     return (
       <Layout username={props.user.username}>
-        <h1>You have no access</h1>
+        <h3>You have no access to this page</h3>
       </Layout>
     );
+  }
+  return (
+    <Layout>
+      <h3>You have no access to this page</h3>
+    </Layout>
+  );
 }
 
 export async function getServerSideProps(context) {

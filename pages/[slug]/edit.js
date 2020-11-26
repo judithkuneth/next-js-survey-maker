@@ -24,7 +24,12 @@ const componentStyles = css`
 
 export default function dashboard(props) {
   const user = props.user;
+  console.log('user', user);
   const access = props.access;
+  const survey = props.survey;
+  if (survey === undefined) {
+    return <Layout>Sorry you have no access to this page.</Layout>;
+  }
   if (access === true) {
     const username = user.username;
     // props.user.username;
@@ -159,6 +164,9 @@ export async function getServerSideProps(context) {
 
   const { getSurveyBySlug } = await import('../../util/database');
   const survey = await getSurveyBySlug(slug);
+  if (survey === undefined) {
+    return { props: {} };
+  }
 
   const { getQuestionWhereSurveyIdIs } = await import('../../util/database');
   const questions = await getQuestionWhereSurveyIdIs(survey.id);
