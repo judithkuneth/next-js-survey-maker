@@ -181,13 +181,13 @@ export default function New(props) {
               onChange={(e) => {
                 setTitle(e.currentTarget.value);
               }}
-              placeholder="My first Survey"
+              placeholder="My Quicksy"
             ></input>
 
             <div>
               <p>www.survey.com/</p>
               <input
-                placeholder="custom-slug"
+                placeholder="quicksy"
                 onChange={(e) => {
                   setSlug(e.currentTarget.value);
                 }}
