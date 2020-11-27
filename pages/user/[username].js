@@ -5,6 +5,7 @@ import Layout from '../../components/Layout';
 import nextCookies from 'next-cookies';
 import Link from 'next/link';
 import { useState } from 'react';
+import { set } from 'js-cookie';
 // import {
 //   getQuestionWhereSurveyIdIs,
 //   getSurveysByUserId,
@@ -14,6 +15,7 @@ const dashboardStyles = css`
   display: flex;
   flex-direction: column;
   margin: 30px 10px;
+  align-items: center;
 
   h3 {
     color: #d5d4d4;
@@ -22,6 +24,7 @@ const dashboardStyles = css`
   }
   button {
     color: #f7fcfc;
+    width: 90%;
   }
 `;
 
@@ -34,6 +37,7 @@ const surveyStyles = css`
   padding: 10px;
   background-color: #f7fcfc;
   border-radius: 10px;
+  width: 90%;
   max-width: 500px;
   h1 {
     margin-bottom: 5px;
@@ -42,8 +46,10 @@ const surveyStyles = css`
     margin: 5px 0px;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
-    align-items: flex-start;
+    justify-content: space-between;
+    // align-items: center;
+    max-width: 500px;
+    width: 100%;
     a {
       color: #878787;
       background-color: #e9ebeb;
@@ -57,10 +63,13 @@ const surveyStyles = css`
     div {
       display: flex;
       flex-direction: column;
+      align-items: center;
       div {
         display: flex;
         flex-direction: row;
-        align-items: center;
+        //
+        justify-content: flex-start;
+        width: 90%;
         h2 {
           margin-right: 4px;
         }
@@ -78,59 +87,43 @@ export default function dashboard(props) {
   const dummySurvey = props.dummySurvey;
   const potentialUser = props.potentialUser;
 
+  const [linkCopied, setLinkCopied] = useState('');
+
   function copyToClipBoard(slug) {
-    navigator.clipboard.writeText(`http://localhost:3000/${slug}`);
+    navigator.clipboard.writeText(`https://myquicksy.herokuapp.com/${slug}`);
+    setLinkCopied('copied to clipboard');
+    setTimeout(world, 5000);
+    function world() {
+      setLinkCopied(``);
+    }
 
     /* Alert the copied text */
-    alert('Copied the text: ' + `http://localhost:3000/${slug}`);
+    // alert(
+    //   'Copied the link: ' +
+    //   <a href={`{https://myquicksy.herokuapp.com/${slug}}`}></a>,
+    // );
+    // alert(
+    //   'Copied the text: ' +
+    //   <a href="">`https://myquicksy.herokuapp.com/${slug}`</a>,
+    // );
   }
   if (!props.user)
     return (
       <Layout>
-        <h1>
-          You are trying to access {potentialUser}'s dashboard but you are not
-          logged in. Please login to get access{' '}
-        </h1>
-        <br />
-        <Link href="../login">
-          <button> Login</button>
-        </Link>
+        <h3 style={{ color: '#f7fcfc' }}>You have no access to this page.</h3>
       </Layout>
     );
   if (dummySurvey)
     var surveyList = dummySurvey.map((dummy) => {
       return (
         <div>
-          <h3>{dummy.title}</h3>
-          draft
-          <br />
-          responses: TODO
-          <br />
-          <button
-            onClick={(e) => {
-              window.location.href = '/results';
-            }}
-          >
-            results
-          </button>
-          <button>share</button>
-          <button
-            onClick={(e) => {
-              window.location.href = '/new';
-            }}
-          >
-            edit
-          </button>
-          <button>delete</button>
-          <br />
-          <br />
-          <button
+          {/* <button
             onClick={(e) => {
               window.location.href = '/new';
             }}
           >
             + NEW SURVEY
-          </button>
+          </button> */}
         </div>
       );
     });
@@ -144,7 +137,6 @@ export default function dashboard(props) {
         <div css={surveyStyles}>
           <h1>{survey.title}</h1>
           {/* <p>{checkStatus()}</p> */}
-
           <div
             style={{
               alignItems: 'center',
@@ -153,7 +145,9 @@ export default function dashboard(props) {
               borderRadius: '10px',
             }}
           >
-            <Link href="">www.surey.com/ux101</Link>
+            <Link href={`/${survey.customSlug}`}>
+              <a target="_blank">myquicksy.com/{survey.customSlug}</a>
+            </Link>
 
             <button
               style={{
@@ -175,7 +169,7 @@ export default function dashboard(props) {
                 // copyToClipBoard(survey.customSlug);
               }}
             >
-              share
+              copy
             </button>
           </div>
           <div>
@@ -253,17 +247,34 @@ export default function dashboard(props) {
   return (
     <Layout username={user.username}>
       <div css={dashboardStyles}>
-        <h3>Welcome {user.username}!</h3>
-
-        {surveyList}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
+          <h3>Welcome {user.username}!</h3>
+          <p style={{ color: '#f7fcfc' }}>{linkCopied}</p>
+        </div>
         <button
-          style={{ width: '100%' }}
+          style={{
+            width: '90%',
+            color: '#30cdcd',
+            borderStyle: 'solid',
+            borderColor: '#30cdcd',
+            backgroundColor: '#f7fcfc',
+            fontSsize: '16px',
+            fontWeight: '550',
+            marginTop: '20px',
+          }}
           onClick={(e) => {
             window.location.href = '/new';
           }}
         >
-          + NEW SURVEY
+          + NEW QUICKSY
         </button>
+        {surveyList}
       </div>
     </Layout>
   );

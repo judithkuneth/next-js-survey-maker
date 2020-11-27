@@ -34,7 +34,12 @@ export default function Header(props) {
     <header css={headerStyles}>
       <nav>
         <Link href="/">
-          <a>Home</a>
+          <img
+            alt=""
+            src="../logo-white.svg"
+            height="40"
+            style={{ margin: '10px 5px' }}
+          />
         </Link>
 
         {/* <Link href="/new">

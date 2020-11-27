@@ -16,7 +16,27 @@ const componentStyles = css`
   // margin: 10px;
   // max-width: 400px;
   div {
+    // align-content: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
     align-content: center;
+
+    div {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+
+      div {
+        display: flex;
+        flex-direction: row;
+
+        div {
+          display: flex;
+          flex-direction: row;
+        }
+      }
+    }
   }
 `;
 
@@ -28,7 +48,13 @@ export default function dashboard(props) {
   const access = props.access;
   const survey = props.survey;
   if (survey === undefined) {
-    return <Layout>Sorry you have no access to this page.</Layout>;
+    return (
+      <Layout>
+        <h3 style={{ color: '#f7fcfc' }}>
+          Sorry you have no access to this page.
+        </h3>
+      </Layout>
+    );
   }
   if (access === true) {
     const username = user.username;
@@ -105,13 +131,19 @@ export default function dashboard(props) {
               //   publish
               // </button>
               // </div>
-              <div>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                }}
+              >
                 <button
                   style={{
                     backgroundColor: '#C1BFBF',
                     color: '#F7FCFC',
                     fontWeight: '650',
                     marginRight: '20px',
+                    width: '140px',
                   }}
                   onClick={(e) => {
                     window.location.href = `/user/${username}`;
@@ -123,6 +155,7 @@ export default function dashboard(props) {
                   style={{
                     color: '#F7FCFC',
                     fontWeight: '650',
+                    width: '140px',
                   }}
                   onClick={(e) => {
                     window.location.href = `/${slug}`;

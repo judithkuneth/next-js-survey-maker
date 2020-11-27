@@ -13,48 +13,55 @@ const formStyles = css`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  justify-content: center;
-  margin: 50px;
-  max-width: 500px;
   align-content: center;
-
-  h1 {
-    color: #d5d4d4;
-    margin-bottom: 10px;
-  }
-  div {
+  form {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
-    p {
+    justify-content: center;
+    margin: 50px;
+    max-width: 500px;
+    align-content: center;
+
+    h1 {
+      color: #d5d4d4;
+      margin-bottom: 10px;
+    }
+    div {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      margin-left: 5px;
+      p {
+        color: #f7fcfc;
+        font-weight: 500;
+        margin-right: 5px;
+      }
+
+      a {
+        font-weight: 600;
+        color: #14a9a9;
+      }
+    }
+
+    input {
+      border-radius: 10px;
+      padding-left: 5px;
+      margin: 5px 0px;
+      width: 97%;
+      // height: 20px;
+      font-size: 18px;
+    }
+    button {
+      width: 100%;
       color: #f7fcfc;
-      font-weight: 500;
-      margin-right: 5px;
+      border-color: #f7fcfc;
+      font-size: 16px;
+      font-weight: 550;
+      border: none;
+      padding: 0px 0px;
+      margin-top: 5px;
     }
-
-    a {
-      font-weight: 600;
-      color: #14a9a9;
-    }
-  }
-
-  input {
-    border-radius: 10px;
-    padding-left: 5px;
-    margin: 5px 0px;
-    // width: 100%;
-    // height: 20px;
-    font-size: 18px;
-  }
-  button {
-    width: 191px;
-    color: #f7fcfc;
-    border-color: #f7fcfc;
-    font-size: 16px;
-    font-weight: 550;
-    border: none;
-    padding: 0px 0px 0px 5px;
-    margin-top: 5px;
   }
 `;
 
@@ -81,66 +88,67 @@ export default function Login(props: { redirectDestination: string }) {
 
   return (
     <Layout>
-      <form
-        css={formStyles}
-        onSubmit={async (e) => {
-          e.preventDefault();
-          const response = await fetch('/api/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              username,
-              password,
-              redirectSlug: redirectSlug(),
-            }),
-          });
+      <div css={formStyles}>
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            const response = await fetch('/api/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                username,
+                password,
+                redirectSlug: redirectSlug(),
+              }),
+            });
 
-          const { success } = await response.json();
-          if (success) {
-            setErrorMessage('');
-            // cookie.set('username', `${username}`);
-            router.push(`/user/${username}`);
-          }
+            const { success } = await response.json();
+            if (success) {
+              setErrorMessage('');
+              // cookie.set('username', `${username}`);
+              router.push(`/user/${username}`);
+            }
 
-          // if (!success) {
-          //   setErrorMessage('Login failed');
-          // }
-          else {
-            //   console.log('successfully logedin');
-            setErrorMessage('Login failed');
-            //   cookie.set('username', `${username}`);
-            //   if (
-            //     props.redirectDestination !== undefined &&
-            //     props.redirectDestination !== ''
-            //   ) {
-            //     router.push(`/${props.redirectDestination}`);
-            //   } else {
-            //     router.push(`/user/${username}`);
-            //   }
-          }
-        }}
-      >
-        <h1>Login</h1>
-        <input
-          placeholder="username"
-          value={username}
-          onChange={(e) => setUsername(e.currentTarget.value)}
-        />
+            // if (!success) {
+            //   setErrorMessage('Login failed');
+            // }
+            else {
+              //   console.log('successfully logedin');
+              setErrorMessage('Login failed');
+              //   cookie.set('username', `${username}`);
+              //   if (
+              //     props.redirectDestination !== undefined &&
+              //     props.redirectDestination !== ''
+              //   ) {
+              //     router.push(`/${props.redirectDestination}`);
+              //   } else {
+              //     router.push(`/user/${username}`);
+              //   }
+            }
+          }}
+        >
+          <h1>Login</h1>
+          <input
+            placeholder="username"
+            value={username}
+            onChange={(e) => setUsername(e.currentTarget.value)}
+          />
 
-        <input
-          placeholder="username"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.currentTarget.value)}
-        ></input>
-        <button>Login</button>
-        <br />
-        <div>
-          <p>New user? </p>
-          <a href="/signup">Signup now</a>
-        </div>
-        <p style={{ color: 'red' }}>{errorMessage}</p>
-      </form>
+          <input
+            placeholder="username"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.currentTarget.value)}
+          ></input>
+          <button>Login</button>
+          <br />
+          <div>
+            <p>New user? </p>
+            <a href="/signup">Signup now</a>
+          </div>
+          <p style={{ color: 'red' }}>{errorMessage}</p>
+        </form>
+      </div>
     </Layout>
   );
 }

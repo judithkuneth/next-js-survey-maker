@@ -6,7 +6,7 @@ export default function Layout(props) {
     <>
       <Head>
         <title>Survey Maker Head</title>
-        <link rel="icon" href="/logo.jpg" />
+        <link rel="icon" href="/logosmall.svg" />
       </Head>
       <Header username={username} />
 

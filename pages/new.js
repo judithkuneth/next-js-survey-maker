@@ -4,21 +4,25 @@ import { jsx, css } from '@emotion/core';
 import React from 'react';
 import Layout from '../components/Layout';
 import { useState } from 'react';
-
 import { useRouter } from 'next/router';
 import nextCookies from 'next-cookies';
-import cookie from 'js-cookie';
 import { isTokenValid } from '../util/auth';
 
 const componentStyles = css`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   // flex-wrap: wrap;
-  justify-content: center;
+  align-items: center;
   margin: 10px;
+  h1 {
+    color: #f7fcfc;
+    font-weight: normal;
+    margin: 10px 0px;
+    text-align: center;
+  }
 
   form {
-    width: 90%;
+    width: 80%;
     max-width: 500px;
     // width: 266px;
     height: 220px;
@@ -30,10 +34,11 @@ const componentStyles = css`
     align-items: flex-start;
     padding-left: 20px;
     padding: 20px;
+    margin-top: 20px;
     justify-content: space-evenly;
     border-style: solid;
     border-width: 3px;
-    border-color: #30cdcd;
+    // border-color: #30cdcd;
 
     input {
       // border-top-style: hidden;
@@ -70,7 +75,6 @@ const componentStyles = css`
 `;
 
 export default function New(props) {
-  const username = cookie.getJSON('username');
   const user = props.user;
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -79,15 +83,18 @@ export default function New(props) {
   const [slug, setSlug] = useState('');
   const router = useRouter();
   if (user.id !== 1) {
+    console.log('userId:', user.id, 'title: ', title, 'customSlug: ', slug);
     return (
       //TODO input URL: make sure no spaces allowed
       <React.Fragment>
-        <Layout username={username}>
+        <Layout username={user.username}>
           <div css={componentStyles}>
+            <img src="logo.svg" alt="" height="120" />
+            <h1>a quick survey for honest feedback</h1>
             <form
               onSubmit={async (e) => {
                 e.preventDefault();
-                const response = await fetch('/api/new', {
+                const response = await fetch('/api/addsurvey', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
@@ -110,12 +117,12 @@ export default function New(props) {
                 onChange={(e) => {
                   setTitle(e.currentTarget.value);
                 }}
-                placeholder="My first Survey"
+                placeholder="My first Quicksy"
               ></input>
               <div>
                 <p>www.survey.com/</p>
                 <input
-                  placeholder="custom-slug"
+                  placeholder="quicksy"
                   onChange={(e) => {
                     setSlug(e.currentTarget.value);
                   }}
@@ -138,60 +145,68 @@ export default function New(props) {
       </React.Fragment>
     );
   }
+  console.log('userId:', user.id, 'title: ', title, 'customSlug: ', slug);
   return (
-    <Layout username={username}>
-      <div css={componentStyles}>
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            const response = await fetch('/api/addsurvey', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                userId: user.id,
-                title: title,
-                customSlug: slug,
-              }),
-            });
-            const { success } = await response.json();
-            if (success) {
-              router.push(`/${slug}/edit`);
-            } else {
-              if (response.status === 403) {
-                setErrorMessage('Slug already in use. Try another one!');
-              } else setErrorMessage('That Failed!');
-            }
-          }}
-        >
-          <input
-            onChange={(e) => {
-              setTitle(e.currentTarget.value);
+    <React.Fragment>
+      <Layout>
+        <div css={componentStyles}>
+          <img src="logo.svg" alt="" height="120" />
+          <h1>a quick survey for honest feedback</h1>
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const response = await fetch('/api/addsurvey', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  userId: user.id,
+                  title: title,
+                  customSlug: slug,
+                }),
+              });
+              const { success } = await response.json();
+              if (success) {
+                router.push(`/${slug}/edit`);
+              } else {
+                if (response.status === 403) {
+                  setErrorMessage('Slug already in use. Try another one!');
+                }
+                if (response.status === 404) {
+                  setErrorMessage('404 error');
+                } else setErrorMessage('That Failed!');
+              }
             }}
-            placeholder="My first Survey"
-          ></input>
-
-          <div>
-            <p>www.survey.com/</p>
-            <input
-              placeholder="custom-slug"
-              onChange={(e) => {
-                setSlug(e.currentTarget.value);
-              }}
-            />
-          </div>
-
-          <button
-
-          // onClick={(e) => {
-          //   window.location.href = `/${slug}/edit`;
-          // }}
           >
-            CREATE SURVEY
-          </button>
-        </form>
-      </div>
-      {errorMessage}
-    </Layout>
+            <input
+              onChange={(e) => {
+                setTitle(e.currentTarget.value);
+              }}
+              placeholder="My first Survey"
+            ></input>
+
+            <div>
+              <p>www.survey.com/</p>
+              <input
+                placeholder="custom-slug"
+                onChange={(e) => {
+                  setSlug(e.currentTarget.value);
+                }}
+              />
+            </div>
+
+            <button
+
+            // onClick={(e) => {
+            //   window.location.href = `/${slug}/edit`;
+            // }}
+            >
+              CREATE SURVEY
+            </button>
+          </form>
+        </div>
+        {errorMessage}
+      </Layout>
+    </React.Fragment>
   );
 }
 
@@ -210,7 +225,6 @@ export async function getServerSideProps(context) {
     const { getUserById } = await import('../util/database');
     const user = await getUserById(userId);
     user.createdAt = JSON.stringify(user.createdAt);
-
     return { props: { user } };
   }
 

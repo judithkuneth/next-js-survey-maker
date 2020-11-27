@@ -32,6 +32,9 @@ form{
     font-size: 16px;
     font-weight: 500;
     color:#f7fcfc;
+    a{font-size: 16px;
+      font-weight: 520;
+      color:#f7fcfc;}
   }
   
   // algn-self: center;}
@@ -182,7 +185,13 @@ export default function slug(props) {
           >
             <h1>{survey.title}</h1>
             {listOfQuestions}
-            <button>SUBMIT</button>
+            <button
+              onClick={(e) => {
+                window.location.href = '/thanks';
+              }}
+            >
+              SUBMIT!
+            </button>
           </form>
         </div>
       </Layout>
@@ -205,7 +214,13 @@ export default function slug(props) {
           >
             <h1>{survey.title}</h1>
             {listOfQuestions}
-            <button>SUBMIT</button>
+            <button
+              onClick={(e) => {
+                window.location.href = '/thanks';
+              }}
+            >
+              SUBMIT!
+            </button>
           </form>
         </div>
       </Layout>

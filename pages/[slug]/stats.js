@@ -99,13 +99,17 @@ export default function stats(props) {
   if (props.user !== undefined) {
     return (
       <Layout username={props.user.username}>
-        <h3>You have no access to this page</h3>
+        <h3 style={{ color: '#f7fcfc' }}>
+          Sorry you have no access to this page.
+        </h3>
       </Layout>
     );
   }
   return (
     <Layout>
-      <h3>You have no access to this page</h3>
+      <h3 style={{ color: '#f7fcfc' }}>
+        Sorry you have no access to this page.
+      </h3>
     </Layout>
   );
 }
