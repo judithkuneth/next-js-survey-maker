@@ -67,6 +67,7 @@ form{
   // }
   
   // algn-self: center;}
+}
 `;
 
 export default function thanks(props) {
