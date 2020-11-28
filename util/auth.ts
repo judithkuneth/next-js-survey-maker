@@ -9,8 +9,7 @@ export async function isTokenValid(token: string | undefined) {
   const session = await getSessionByToken(token);
   console.log('getSessionByToken(token)', await getSessionByToken(token));
   console.log('typeofsession', typeof session);
-  if (typeof session === undefined) {
-    console.log('oh no typeofsession is undefined');
+  if (typeof session === 'undefined') {
     return false;
   }
   console.log('session is defined', session);

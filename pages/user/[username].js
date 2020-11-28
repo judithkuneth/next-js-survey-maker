@@ -243,7 +243,7 @@ export default function dashboard(props) {
         </div>
       );
     });
-  console.log('fuckin f´surveys', surveys);
+ 
   return (
     <Layout username={user.username}>
       <div css={dashboardStyles}>

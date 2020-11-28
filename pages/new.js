@@ -212,13 +212,24 @@ export default function New(props) {
 
 export async function getServerSideProps(context) {
   const { session } = nextCookies(context);
-  const { getSessionByToken } = await import('../util/database');
+  
+  // console.log('Await', await isTokenValid(session))
+
+  if(session){console.log('session? true')
 
   if (await isTokenValid(session)) {
     console.log('token valid');
 
-    const sessionByToken = await getSessionByToken(session);
+    const { getSessionByToken } = await import('../util/database');
 
+    const sessionByToken = await getSessionByToken(session);
+    console.log('sessionByToken' ,sessionByToken)
+    if (sessionByToken === 'undefined'){console.log('sessionByToken undefined')
+    return{redirect: {
+      destination: '/logout',
+      permanent: false,
+    },}}
+    
     const userId = sessionByToken.userId;
     console.log('userId', sessionByToken.userId);
 
@@ -227,7 +238,14 @@ export async function getServerSideProps(context) {
     user.createdAt = JSON.stringify(user.createdAt);
     return { props: { user } };
   }
-
+  console.log('token not valid')
+  return {
+    redirect: {
+      destination: '/logout',
+      permanent: false,
+    },
+  };
+}
   const dummyUser = { id: 1 };
   return { props: { user: dummyUser } };
 }
