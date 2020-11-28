@@ -29,7 +29,7 @@ const headerStyles = css`
 
 export default function Header(props) {
   const username = props.username;
-  console.log('username in header', username);
+  // console.log('username in header', username);
   return (
     <header css={headerStyles}>
       <nav>

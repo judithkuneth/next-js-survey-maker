@@ -5,7 +5,7 @@ import Layout from '../../components/Layout';
 import nextCookies from 'next-cookies';
 import Link from 'next/link';
 import { useState } from 'react';
-import { set } from 'js-cookie';
+
 // import {
 //   getQuestionWhereSurveyIdIs,
 //   getSurveysByUserId,
@@ -32,7 +32,6 @@ const surveyStyles = css`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  // justify-content: center;
   margin: 20px 0px;
   padding: 10px;
   background-color: #f7fcfc;
@@ -47,7 +46,6 @@ const surveyStyles = css`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    // align-items: center;
     max-width: 500px;
     width: 100%;
     a {
@@ -97,15 +95,6 @@ export default function dashboard(props) {
       setLinkCopied(``);
     }
 
-    /* Alert the copied text */
-    // alert(
-    //   'Copied the link: ' +
-    //   <a href={`{https://myquicksy.herokuapp.com/${slug}}`}></a>,
-    // );
-    // alert(
-    //   'Copied the text: ' +
-    //   <a href="">`https://myquicksy.herokuapp.com/${slug}`</a>,
-    // );
   }
   if (!props.user)
     return (
@@ -117,26 +106,16 @@ export default function dashboard(props) {
     var surveyList = dummySurvey.map((dummy) => {
       return (
         <div>
-          {/* <button
-            onClick={(e) => {
-              window.location.href = '/new';
-            }}
-          >
-            + NEW SURVEY
-          </button> */}
+         
         </div>
       );
     });
   else
     var surveyList = surveys.map((survey) => {
-      function checkStatus() {
-        if (survey.published === false) return 'draft';
-        else return 'published';
-      }
+      
       return (
         <div css={surveyStyles}>
           <h1>{survey.title}</h1>
-          {/* <p>{checkStatus()}</p> */}
           <div
             style={{
               alignItems: 'center',
@@ -158,15 +137,10 @@ export default function dashboard(props) {
                 height: '30px',
                 width: '70px',
                 fontSize: '18px',
-                // marginTop: '10px',
               }}
               onClick={(e) => {
                 copyToClipBoard(survey.customSlug);
-                // navigator.clipboard.writeText(
-                //   `http://localhost:3000/${survey.customSlug}`,
-                // );
-                // console.log('survey.customSlug', survey.customSlug);
-                // copyToClipBoard(survey.customSlug);
+                
               }}
             >
               copy
@@ -174,10 +148,10 @@ export default function dashboard(props) {
           </div>
           <div>
             <div>
-              <div>
+              {/* <div>
                 <h2>0</h2>
                 <p>questions</p>
-              </div>
+              </div> */}
               <button
                 style={{
                   backgroundColor: '#C1BFBF',
@@ -195,21 +169,13 @@ export default function dashboard(props) {
               </button>
             </div>
             <div>
-              {/*TODO: Refresh onclick*/}
+              
 
-              {/* <button
-            onClick={(e) => {
-              window.location.href = `/${survey.customSlug}`;
-            }}
-          >
-            publish
-          </button> */}
-
-              {/* <div> */}
-              <div>
+             
+              {/* <div>
                 <h2>0</h2>
                 <p>responses</p>
-              </div>
+              </div> */}
               <button
                 style={{
                   color: '#F7FCFC',
@@ -224,7 +190,7 @@ export default function dashboard(props) {
               >
                 see results
               </button>
-              {/* </div> */}
+              
             </div>
           </div>
           {/* <button
@@ -288,7 +254,7 @@ export async function getServerSideProps(context) {
   if (session !== undefined) {
     const sessionByToken = await getSessionByToken(session);
     const userId = sessionByToken.userId;
-    console.log('session.userId', sessionByToken.userId);
+   
     const { getUserById } = await import('../../util/database');
     const user = await getUserById(userId);
     user.createdAt = JSON.stringify(user.createdAt);
@@ -302,6 +268,8 @@ export async function getServerSideProps(context) {
     }
 
     const surveys = await getSurveysByUserId(user.id);
+
+    
 
     return {
       props: { user: user, surveys: surveys },

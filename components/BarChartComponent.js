@@ -24,7 +24,7 @@ export default function BarChartComponent(props) {
       return r.responseValue;
     }
   });
-  console.log('responseValues', responseValues);
+  // console.log('responseValues', responseValues);
 
   // count occurence of a value:
   //function(array,value)=>array.reduce((),0)
@@ -41,19 +41,19 @@ export default function BarChartComponent(props) {
       value: step,
       n: countOccurrences(responseValues, step),
     };
-    console.log('countByValue', countByValue);
+    // console.log('countByValue', countByValue);
 
     barChartData.push(countByValue);
-    console.log('updated barChartData', barChartData);
+    // console.log('updated barChartData', barChartData);
 
-    console.log(
-      'countOccurence of step',
-      step,
-      countOccurrences(responseValues, step),
-    );
+    // console.log(
+    //   'countOccurence of step',
+    //   step,
+    //   countOccurrences(responseValues, step),
+    // );
   }
 
-  console.log('BarChartComponent.js: responses', responses);
+  // console.log('BarChartComponent.js: responses', responses);
   // const barChartData = [
   //   { value: -2, n: 2 },
   //   { value: -1, n: 3 },

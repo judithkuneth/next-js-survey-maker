@@ -44,7 +44,7 @@ const componentStyles = css`
 
 export default function dashboard(props) {
   const user = props.user;
-  console.log('user', user);
+  // console.log('user', user);
   const access = props.access;
   const survey = props.survey;
   if (survey === undefined) {
@@ -59,7 +59,7 @@ export default function dashboard(props) {
   if (access === true) {
     const username = user.username;
     // props.user.username;
-    console.log('user', user);
+    // console.log('user', user);
     // console.log('get cookie username', cookie.get.JSON('username'))
     const surveyId = props.surveyId;
     const slug = props.slug;
@@ -205,7 +205,7 @@ export async function getServerSideProps(context) {
   const questions = await getQuestionWhereSurveyIdIs(survey.id);
 
   if (await isTokenValid(session)) {
-    console.log('token valid');
+    // console.log('token valid');
     const { getSessionByToken } = await import('../../util/database');
     const sessionByToken = await getSessionByToken(session);
 

@@ -9,7 +9,7 @@ import BarChartComponent from '../../components/BarChartComponent';
 const layoutStyles = css`
 display: flex;
   flex-direction: column;
-  // align-items: center;
+;
   align-items: center;
   h1{color:#767474;margin:30px 0px}
 div{
@@ -17,39 +17,29 @@ div{
   flex-direction: column;
   flex-wrap: wrap;
   align-items: center;
-  // margin-top: 50px;
+
   background-color: #f7fcfc;
   border-radius: 10px;
   margin: 10px 0px;
-  // padding: 20px;
+  
   width: 90%;
   max-width: 500px;
-  // max-width:500px;
+
   h2{margin: 0px 0px 20px 0px}
-  // button{
-  //   width: 100%;
-  //   margin-top:50px;
-  //   border-color: #f7fcfc;
-  //   font-size: 16px;
-  //   font-weight: 500;
-  //   color:#f7fcfc;
-  // }
+  
+}
   `;
 
 export default function stats(props) {
   if (props.access === true) {
     const survey = props.survey;
     const questions = props.questions;
-    console.log('stats.js: questions', questions);
+    
     const responses = props.responses;
-    console.log('stats.js: responses', responses);
+    
     const responsesSimplified = responses.flat();
 
-    console.log(
-      'stats.js: simplified responses, .lenght',
-      responsesSimplified,
-      responsesSimplified.length,
-    );
+    
 
     return (
       <Layout username={props.user.username}>
@@ -61,36 +51,17 @@ export default function stats(props) {
               return (
                 <div>
                   <h2>{question.title}</h2>
-                  {/* <div> */}
+                
                   <BarChartComponent
                     question={question}
                     responses={responsesSimplified}
                   />
-                  {/* </div> */}
-                  {/* <br />
-                  {question.valueMin}
-                  {question.descriptionMin}
-                  <input type="range"></input>
-                  {question.valueMax}
-                  {question.descriptionMay}
-                  <br /> */}
+                  
                 </div>
               );
             })}
 
-            {/* {responses[0].map((response) => {
-              return (
-                <div>
-                  <br />
-                  id: {response.questionId}
-                  <br />
-                  id: {response.id}
-                  <br />
-                  value: {response.responseValue}
-                  <br />
-                </div>
-              );
-            })} */}
+            
           </div>
         </div>
       </Layout>
@@ -117,8 +88,7 @@ export default function stats(props) {
 export async function getServerSideProps(context) {
   const { session } = nextCookies(context);
 
-  console.log('await', await isTokenValid(session));
-  console.log(session);
+  
 
   if (await isTokenValid(session)) {
     console.log('token valid');

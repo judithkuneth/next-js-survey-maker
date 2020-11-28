@@ -83,8 +83,8 @@ export default function Login(props: { redirectDestination: string }) {
       return redSlug;
     } else return '';
   }
-  console.log('redirect destination in login wojho', props.redirectDestination);
-  console.log('redirectSlug()', redirectSlug());
+  // console.log('redirect destination in login wojho', props.redirectDestination);
+  // console.log('redirectSlug()', redirectSlug());
 
   return (
     <Layout>
@@ -160,16 +160,16 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const { getSessionByToken } = await import('../util/database');
     const sessionByToken = await getSessionByToken(session);
     const userId = sessionByToken.userId;
-    console.log('session.userId', sessionByToken.userId);
+    // console.log('session.userId', sessionByToken.userId);
     const { getUserById } = await import('../util/database');
     const user = await getUserById(userId);
     const username = user.username;
     // user.createdAt = JSON.stringify(user.createdAt);
 
-    console.log('redirectDestination', redirectDestination);
+    // console.log('redirectDestination', redirectDestination);
 
     if (await isTokenValid(session)) {
-      console.log('tokenvalid?yes');
+      // console.log('tokenvalid?yes');
 
       return { props: { redirectDestination } };
       // return {
@@ -179,7 +179,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       //   },
       // };
     }
-    console.log('istokenvalid? no');
+    // console.log('istokenvalid? no');
 
     return { props: { redirectDestination } };
   }

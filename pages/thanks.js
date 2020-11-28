@@ -197,20 +197,20 @@ export async function getServerSideProps(context) {
   const slug = context.query.slug;
   const { session } = nextCookies(context);
 
-  console.log('check', await isTokenValid(session));
+  /* console.log('check', await isTokenValid(session)); */
 
   if (await isTokenValid(session)) {
-    console.log('token valid');
+    /* console.log('token valid'); */
     const { getSessionByToken } = await import('../util/database');
     const sessionByToken = await getSessionByToken(session);
-    console.log('sessionByToken', sessionByToken);
+    /* console.log('sessionByToken', sessionByToken); */
 
     const userId = sessionByToken.userId;
-    console.log('userId', sessionByToken.userId);
+    /* console.log('userId', sessionByToken.userId); */
 
     const { getUserById } = await import('../util/database');
     const user = await getUserById(userId);
-    console.log('user', user);
+    /* console.log('user', user); */
     user.createdAt = JSON.stringify(user.createdAt);
     return {
       props: {

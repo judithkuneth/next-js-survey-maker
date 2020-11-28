@@ -66,7 +66,7 @@ export default function Signup(props: {
   token: string;
   redirectDestination: string;
 }) {
-  console.log('log redirectDestination', props.redirectDestination);
+  // console.log('log redirectDestination', props.redirectDestination);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
@@ -97,30 +97,13 @@ export default function Signup(props: {
             });
             const { success } = await response.json();
             if (success) {
-              console.log('success');
+              // console.log('success');
 
               if (props.redirectDestination !== '/') {
-                console.log('props.redirectDest !=== /');
+                // console.log('props.redirectDest !=== /');
                 router.push(`/${props.redirectDestination}`);
 
-                // -----------------------------------------
-                // async (e) => {
-                //   e.preventDefault();
-                //   const response = await fetch('/api/editsurvey', {
-                //     method: 'POST',
-                //     headers: { 'Content-Type': 'application/json' },
-                //     body: JSON.stringify({ slug: 'aaa', username }),
-                //   });
-
-                //   const { success } = await response.json();
-
-                //   if (success) {
-                //     router.push(`/${props.redirectDestination}`);
-                //   } else {
-                //     setErrorMessage('That Failed!');
-                //   }
-                // };
-                //----------------------------------------
+                
               } else router.push(`/login`);
             } else {
               if (response.status === 403) {
@@ -164,7 +147,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const secret = process.env.CSRF_TOKEN_SECRET;
 
   const redirectDestination = context?.query?.returnTo ?? '/';
-  console.log('redirectDestination', redirectDestination);
+  // console.log('redirectDestination', redirectDestination);
 
   if (typeof secret === 'undefined') {
     throw new Error('CSRF_TOKEN_SECRET environment variable not configured!');

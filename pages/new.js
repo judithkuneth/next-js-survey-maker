@@ -11,7 +11,6 @@ import { isTokenValid } from '../util/auth';
 const componentStyles = css`
   display: flex;
   flex-direction: column;
-  // flex-wrap: wrap;
   align-items: center;
   margin: 10px;
   h1 {
@@ -24,7 +23,6 @@ const componentStyles = css`
   form {
     width: 80%;
     max-width: 500px;
-    // width: 266px;
     height: 220px;
     background-color: #f7fcfc;
     border-radius: 10px;
@@ -38,15 +36,8 @@ const componentStyles = css`
     justify-content: space-evenly;
     border-style: solid;
     border-width: 3px;
-    // border-color: #30cdcd;
 
     input {
-      // border-top-style: hidden;
-      // border-right-style: hidden;
-      // border-left-style: hidden;
-      // border-bottom-style: solid;
-      // border-radius: 0px;
-      // border-color: #c1bfbf;
       width: 100%;
     }
 
@@ -68,7 +59,6 @@ const componentStyles = css`
         font-size: 13px;
         width: 150px;
         height: 20px;
-        // padding: 0px;
       }
     }
   }
@@ -78,12 +68,11 @@ export default function New(props) {
   const user = props.user;
   const [errorMessage, setErrorMessage] = useState('');
 
-  // const username = user.username;
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
   const router = useRouter();
   if (user.id !== 1) {
-    console.log('userId:', user.id, 'title: ', title, 'customSlug: ', slug);
+    
     return (
       //TODO input URL: make sure no spaces allowed
       <React.Fragment>
@@ -130,11 +119,6 @@ export default function New(props) {
               </div>
 
               <button
-
-              //   onClick={(e) => {
-              //     window.location.href = `/${slug}/edit`;
-              //   }
-              // }
               >
                 CREATE SURVEY
               </button>
@@ -145,7 +129,7 @@ export default function New(props) {
       </React.Fragment>
     );
   }
-  console.log('userId:', user.id, 'title: ', title, 'customSlug: ', slug);
+
   return (
     <React.Fragment>
       <Layout>
@@ -195,10 +179,6 @@ export default function New(props) {
             </div>
 
             <button
-
-            // onClick={(e) => {
-            //   window.location.href = `/${slug}/edit`;
-            // }}
             >
               CREATE SURVEY
             </button>
@@ -213,39 +193,31 @@ export default function New(props) {
 export async function getServerSideProps(context) {
   const { session } = nextCookies(context);
   
-  // console.log('Await', await isTokenValid(session))
-
-  if(session){console.log('session? true')
+   if(session)
 
   if (await isTokenValid(session)) {
-    console.log('token valid');
 
     const { getSessionByToken } = await import('../util/database');
 
     const sessionByToken = await getSessionByToken(session);
-    console.log('sessionByToken' ,sessionByToken)
-    if (sessionByToken === 'undefined'){console.log('sessionByToken undefined')
+    
+    if (sessionByToken === 'undefined'){
+     
     return{redirect: {
       destination: '/logout',
       permanent: false,
     },}}
     
     const userId = sessionByToken.userId;
-    console.log('userId', sessionByToken.userId);
+    
 
     const { getUserById } = await import('../util/database');
     const user = await getUserById(userId);
     user.createdAt = JSON.stringify(user.createdAt);
     return { props: { user } };
   }
-  console.log('token not valid')
-  return {
-    redirect: {
-      destination: '/logout',
-      permanent: false,
-    },
-  };
-}
+  
+
   const dummyUser = { id: 1 };
   return { props: { user: dummyUser } };
 }
