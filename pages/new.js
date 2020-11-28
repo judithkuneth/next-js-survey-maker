@@ -161,7 +161,7 @@ export default function New(props) {
               }
             }}
           >
-            <input
+            <input data-cy="input-survey-title"
               onChange={(e) => {
                 setTitle(e.currentTarget.value);
               }}
@@ -169,8 +169,8 @@ export default function New(props) {
             ></input>
 
             <div>
-              <p>www.survey.com/</p>
-              <input
+              <p>myquicksy.com/</p>
+              <input data-cy="input-survey-slug"
                 placeholder="quicksy"
                 onChange={(e) => {
                   setSlug(e.currentTarget.value);
@@ -178,7 +178,7 @@ export default function New(props) {
               />
             </div>
 
-            <button
+            <button data-cy="button-survey-create"
             >
               CREATE SURVEY
             </button>
