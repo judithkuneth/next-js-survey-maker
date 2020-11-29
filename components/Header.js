@@ -49,7 +49,7 @@ export default function Header(props) {
         </Link> */}
         {username ? (
           <Link href={`/user/${username}`}>
-            <a>Dasboard</a>
+            <a>Dashboard</a>
           </Link>
         ) : (
           <div></div>
