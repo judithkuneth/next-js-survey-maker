@@ -96,7 +96,7 @@ export default function thanks(props) {
               <button
                 onClick={(e) => {
                   window.location.href=
-                    'https:www.linkedin.com/in/judith-kuneth'
+                    'https://www.linkedin.com/in/judith-kuneth'
                   
                 }}
                 style={{
@@ -112,7 +112,7 @@ export default function thanks(props) {
               </button>
               <button
                 onClick={(e) => {
-                  window.open('https:www.github.com/judithkuneth', '_blank');
+                  window.open('https://www.github.com/judithkuneth', '_blank');
                 }}
                 style={{
                   color: '#30CDCD',
@@ -155,7 +155,7 @@ export default function thanks(props) {
               <button
                 onClick={(e) => {
                   window.open(
-                    'https:www.linkedin.com/in/judith-kuneth',
+                    'https://www.linkedin.com/in/judith-kuneth',
                     '_blank',
                   );
                 }}
@@ -172,7 +172,7 @@ export default function thanks(props) {
               </button>
               <button
                 onClick={(e) => {
-                  window.open('https:www.github.com/judithkuneth', '_blank');
+                  window.open('https://www.github.com/judithkuneth', '_blank');
                 }}
                 style={{
                   color: '#30CDCD',
