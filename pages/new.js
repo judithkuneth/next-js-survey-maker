@@ -69,8 +69,11 @@ export default function New(props) {
   const [errorMessage, setErrorMessage] = useState('');
 
   const [title, setTitle] = useState('');
-  const [slug, setSlug] = useState('');
+  
+  const [slug, setSlug] = useState(title);
   const router = useRouter();
+  
+  
   if (user.id !== 1) {
     
     return (
@@ -104,14 +107,14 @@ export default function New(props) {
             >
               <input
                 onChange={(e) => {
-                  setTitle(e.currentTarget.value);
+                  setTitle(e.currentTarget.value), setSlug(e.currentTarget.value.replace(/ /g,"-"));
                 }}
                 placeholder="My first Quicksy"
               ></input>
               <div>
                 <p>www.survey.com/</p>
                 <input
-                  placeholder="quicksy"
+                  placeholder = {slug}
                   onChange={(e) => {
                     setSlug(e.currentTarget.value);
                   }}
@@ -163,7 +166,7 @@ export default function New(props) {
           >
             <input data-cy="input-survey-title"
               onChange={(e) => {
-                setTitle(e.currentTarget.value);
+                setTitle(e.currentTarget.value), setSlug(e.currentTarget.value.replace(/ /g,"-"));
               }}
               placeholder="My Quicksy"
             ></input>
@@ -171,7 +174,7 @@ export default function New(props) {
             <div>
               <p>myquicksy.com/</p>
               <input data-cy="input-survey-slug"
-                placeholder="quicksy"
+                placeholder={slug}
                 onChange={(e) => {
                   setSlug(e.currentTarget.value);
                 }}
