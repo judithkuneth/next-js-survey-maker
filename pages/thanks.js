@@ -95,10 +95,9 @@ export default function thanks(props) {
             <div>
               <button
                 onClick={(e) => {
-                  window.open(
-                    'https:www.linkedin.com/in/judith-kuneth',
-                    '_blank',
-                  );
+                  window.location.href=
+                    'https:www.linkedin.com/in/judith-kuneth'
+                  
                 }}
                 style={{
                   color: '#f7fcfc',
