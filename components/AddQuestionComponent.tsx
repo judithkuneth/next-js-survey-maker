@@ -78,7 +78,7 @@ export default function AddQuestionComponent(props: { survey: Survey }) {
     });
     const { success } = await response.json();
     if (success) {
-      location.reload(true);
+      location.reload();
     }
   }
 
@@ -86,7 +86,7 @@ export default function AddQuestionComponent(props: { survey: Survey }) {
     <div css={componentStyles}>
       <form
         onSubmit={(e) => {
-          e.preventDefault, onSubmitFunction();
+          e.preventDefault,(onSubmitFunction());
         }}
       >
         <input

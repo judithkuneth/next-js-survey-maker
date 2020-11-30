@@ -101,12 +101,14 @@ export default function EditQuestionComponent(props: { question: Question }) {
               questionId: questionId,
             }),
           });
+          const { success } = await response.json();
+    if (success) {
+      location.reload();
+    }
         }}
       >
         <button
-          onClick={(e) => {
-            location.reload(true);
-          }}
+          
         >
           X
         </button>
