@@ -9,11 +9,11 @@ export default function AddQuestionComponent(props: { survey: Survey }) {
   const [surveyId, setSurveyId] = useState(props.survey.id);
   const [itemOrder, setItemOrder] = useState(0);
   const [questionType, setQuestionType] = useState('x_slider');
-  const [title, setTitle] = useState('level of interaction');
+  const [title, setTitle] = useState('I found the content..');
   const [valueMin, setValueMin] = useState(-2);
   const [valueMax, setValueMax] = useState(2);
-  const [descriptionMin, setDescriptionMin] = useState('very poor');
-  const [descriptionMax, setDescriptionMax] = useState('very good');
+  const [descriptionMin, setDescriptionMin] = useState('boring');
+  const [descriptionMax, setDescriptionMax] = useState('interesting');
 
   const componentStyles = css`
     display: flex;
@@ -90,7 +90,7 @@ export default function AddQuestionComponent(props: { survey: Survey }) {
         }}
       >
         <input
-          placeholder="level of interaction"
+          placeholder="I found the content.."
           onChange={(e) => {
             setTitle(e.currentTarget.value);
           }}
@@ -126,13 +126,13 @@ export default function AddQuestionComponent(props: { survey: Survey }) {
         <input type="range"></input>
         <div>
           <input
-            placeholder="very poor"
+            placeholder="boring"
             onChange={(e) => {
               setDescriptionMin(e.currentTarget.value);
             }}
           />
           <input
-            placeholder="very good"
+            placeholder="interesting"
             onChange={(e) => {
               setDescriptionMax(e.currentTarget.value);
             }}
